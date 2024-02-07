@@ -4,15 +4,22 @@ import javax.swing.*;
 import java.io.*;
 
 public class Practica1 {
+    //Se tienen objetos estaticos para que puedan ser llamadas en todos los metodos, ya que se usan en todos.
 
     static FileWriter fWriter = null;
     static BufferedWriter bw = null;
     static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
 
+  /*  Se crea un archivo desde mi directorio u1(esta en mi proyecto, recordemos el concepto de ruta relativa
+    y se usa un FileWritter y se activa el append para la permanencia de datos
+    el cual se usa en un BufferedWritter y este se usa para llamar
+    el metodo escribir archivo()
+    */
+
     public static void main(String[] args) throws IOException {
         try {
-            File archive = new File("./Practica1.txt");
+            File archive = new File("./u1/Practica1.txt");
             fWriter = new FileWriter(archive,true);
             
             bw = new BufferedWriter(fWriter);
@@ -27,6 +34,14 @@ public class Practica1 {
         }
     }
 
+    /*
+    El metodo escribirArchivo recibe un objeto BufferedWriter. Se inicia con una variable booleana
+    para indicar que queremos agregar otro registro, se inicia en verdaderos para iniciar el ciclo while
+    Y dentro del ciclo se manda a llamar el metodo pedirInformacionPersona() y se escribe en el archivo
+    por medio del BufferedWriter y por medio del metodo toString() del objeto persona.
+    Se pregunta si se quiere agregar otro registro y dependiendo de la respuesta, si equivale si o no
+    se modifica el estado booleano de la variable agregarOtro parasalir del ciclo
+     */
     public static void escribirArchivo(BufferedWriter bw) throws IOException {
         boolean agregarOtro = true;
         while(agregarOtro){
@@ -46,6 +61,12 @@ public class Practica1 {
             agregarOtro = respuesta.equalsIgnoreCase("SI");
         }
     }
+
+    /*
+    Este método llamado pedirInformacionPersona es de tipo Persona, ya que en este metodo se
+    piden los datos por medio de la consola usando el objeto BufferedReader y se retorna un
+    objeto Persona
+     */
     public static Persona pedirInformacionPersona()throws IOException{
         System.out.println("Escriba el nombre: ");
         //BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
