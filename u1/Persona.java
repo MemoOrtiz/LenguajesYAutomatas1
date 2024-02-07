@@ -15,6 +15,6 @@ public class Persona {
 
     @Override
     public String toString() {
-        return nombre + " " + apellidoPaterno + " " + apellidoMaterno + " " + edad;
+        return nombre + " | " + apellidoPaterno + " | " + apellidoMaterno + " | " + edad;
     }
 }

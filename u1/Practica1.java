@@ -6,18 +6,66 @@ import java.io.*;
 public class Practica1 {
 
     static FileWriter fWriter = null;
-    static PrintWriter pWriter = null;
     static BufferedWriter bw = null;
+    static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+
 
     public static void main(String[] args) throws IOException {
-            boolean agregarOtro = true;
-            BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        try {
+            File archive = new File("./Practica1.txt");
+            fWriter = new FileWriter(archive,true);
+            
+            bw = new BufferedWriter(fWriter);
 
+            escribirArchivo(bw);
+            bw.close();
+            fWriter.close();
+            br.close();
+        } catch (IOException e) {
+            System.out.println("Error al escribir en el archivo: " + e.getMessage());
 
+        }
     }
 
+    public static void escribirArchivo(BufferedWriter bw) throws IOException {
+        boolean agregarOtro = true;
+        while(agregarOtro){
+            Persona persona = pedirInformacionPersona();
+            bw.write(persona.toString());
+            bw.newLine();
 
-    public static void escribirArchivo() {
+            System.out.println("¿Deseas agregar a otra persona? (SI/NO):");
+
+            String respuesta = br.readLine();
+
+            while (!respuesta.equalsIgnoreCase("SI") && !respuesta.equalsIgnoreCase("NO")) {
+                System.out.println("Respuesta inválida. Por favor, responda con 'SI' o 'NO':");
+                respuesta = br.readLine();
+            }
+
+            agregarOtro = respuesta.equalsIgnoreCase("SI");
+        }
+    }
+    public static Persona pedirInformacionPersona()throws IOException{
+        System.out.println("Escriba el nombre: ");
+        //BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        String nombre = br.readLine();
+
+
+        System.out.println("Escriba el apellido Paterno: ");
+        String apellidoPaterno = br.readLine();
+
+        System.out.println("Escriba el apellido Materno: ");
+        String apellidoMaterno = br.readLine();
+
+        System.out.println("Escriba la edad: ");
+        int edad = Integer.parseInt(br.readLine());
+        return new Persona(nombre, apellidoPaterno, apellidoMaterno, edad);
+    }
+}
+
+
+    /*public static void escribirArchivo() {
         try {
             File archive = new File("./Practica1.txt");
             fWriter = new FileWriter(archive);
@@ -37,7 +85,7 @@ public class Practica1 {
             System.out.println("Escriba la edad: ");
             int edad = br.read();
 
-            
+
             bw.write(nombre+ " | " +apellidoPaterno+ " | " +apellidoMaterno+ " | " +edad);
 
 
@@ -48,22 +96,4 @@ public class Practica1 {
         } catch (IOException e) {
             JOptionPane.showMessageDialog(null, "no se ha podido cerrar el archivo");
         }
-    }
-
-    public static Persona informacionPersona() throws IOException {
-        System.out.println("Escriba el nombre: ");
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        String nombre = br.readLine();
-
-
-        System.out.println("Escriba el apellido Paterno: ");
-        String apellidoPaterno = br.readLine();
-
-        System.out.println("Escriba el apellido Materno: ");
-        String apellidoMaterno = br.readLine();
-
-        System.out.println("Escriba la edad: ");
-        int edad = br.read();
-        return new Persona(nombre, apellidoPaterno, apellidoMaterno, edad);
-    }
-}
+    }*/
