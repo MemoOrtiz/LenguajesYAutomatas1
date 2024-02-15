@@ -1,6 +1,5 @@
 package u1;
 
-import javax.swing.*;
 import java.io.*;
 
 public class Practica1 {
@@ -11,7 +10,7 @@ public class Practica1 {
     static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
 
-  /*  Se crea un archivo desde mi directorio u1(esta en mi proyecto, recordemos el concepto de ruta relativa
+  /*  Se crea un archivo desde el directorio u1(esta en mi proyecto, recordemos el concepto de ruta relativa
     y se usa un FileWritter y se activa el append para la permanencia de datos
     el cual se usa en un BufferedWritter y este se usa para llamar
     el metodo escribir archivo()
@@ -23,7 +22,9 @@ public class Practica1 {
             fWriter = new FileWriter(archive,true);
             
             bw = new BufferedWriter(fWriter);
-
+            if(archive.length()== 0){
+                bw.write("NOMBRE|APELLIDO PATERNO|APELLIDO MATERNO|EDAD\n");
+            }
             escribirArchivo(bw);
             bw.close();
             fWriter.close();
@@ -84,37 +85,3 @@ public class Practica1 {
         return new Persona(nombre, apellidoPaterno, apellidoMaterno, edad);
     }
 }
-
-
-    /*public static void escribirArchivo() {
-        try {
-            File archive = new File("./Practica1.txt");
-            fWriter = new FileWriter(archive);
-            bw = new BufferedWriter(fWriter);
-            BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-
-            System.out.println("Escriba el nombre: ");
-            String nombre = br.readLine();
-
-
-            System.out.println("Escriba el apellido Paterno: ");
-            String apellidoPaterno = br.readLine();
-
-            System.out.println("Escriba el apellido Materno: ");
-            String apellidoMaterno = br.readLine();
-
-            System.out.println("Escriba la edad: ");
-            int edad = br.read();
-
-
-            bw.write(nombre+ " | " +apellidoPaterno+ " | " +apellidoMaterno+ " | " +edad);
-
-
-            // cerrarlo
-            pWriter.close();
-            fWriter.close();
-            bw.close();
-        } catch (IOException e) {
-            JOptionPane.showMessageDialog(null, "no se ha podido cerrar el archivo");
-        }
-    }*/

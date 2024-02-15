@@ -1,1 +1,11 @@
-hola | como | estas | 23
+NOMBRE|APELLIDO PATERNO|APELLIDO MATERNO|EDAD
+guillermo | ortiz | aguilar | 22
+manuel | treviño | aguilar | 20
+diego | chacon | vazquez | 21
+Karina | oki | doki | 12
+Rosario | Aguilar | Salazar | 50
+Humberto | Ortiz | Moreno | 55
+Brandon | Castillo | Martinez | 9
+Alberto | Villarreal | Castillo | 25
+Juan | Perez | Lira | 25
+Humberto | Perez | Lira | 32
