@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.regex.Pattern;
 
 /*
 La aplicación o programa puede recibir como entrada:
@@ -30,7 +31,12 @@ public class Practica2 {
                 """;
         int opcion = 0;
         while(opcion != 5){
+            try{
             opcion = Integer.parseInt(JOptionPane.showInputDialog(null,menu));
+                if (opcion < 1 || opcion > 5) {
+                    JOptionPane.showMessageDialog(null, "Por favor, ingrese una opción válida.");
+                    continue;
+                }
             switch (opcion){
                 case 1:
                 try{
@@ -52,18 +58,31 @@ public class Practica2 {
                     }
 
                 } catch (FileNotFoundException e) {
+                    JOptionPane.showMessageDialog(null, "No se pudo abrir el archivo");
                     System.out.println("No se pudo abrir el archivo");
                 } catch (IOException e) {
+                    JOptionPane.showMessageDialog(null, "Conflicto para leer el archivo");
                     System.out.println("Conflicto para leer el archivo");
                 }
                     break;
                 case 2:
+                    String expresionRegular = "(hola)+(0|1)*";
+                    Pattern pattern = Pattern.compile(expresionRegular);
+
+                    // se usa un foreach para evaluar el arraylist en cada elemento, el cual contiene elementos palabras
+                    for (String palabra:palabras) {
+                        boolean coincidencia = pattern.matcher(palabra).matches();
+                        System.out.println("Palabra: " + palabra + " - Coincide: " + coincidencia);
+                    }
                     break;
                 case 3:
                     break;
                 case 4:
                     break;
 
+            }
+        }catch (NumberFormatException e) {
+                JOptionPane.showMessageDialog(null, "Por favor, ingrese un número válido.");
             }
         }
     }
