@@ -1,5 +1,7 @@
 package u2;
 
+import misUtilerias.SalidaFormateada;
+
 import javax.swing.*;
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
@@ -20,7 +22,9 @@ y diseño lógico del programa acorde al paradigma asociado al lenguaje de progr
  */
 public class Practica2 {
     static String nombreArchivo = "./u2/practica2.txt";
-    static List<String> palabras = new ArrayList<>();
+    static List<String> palabrasDeArchivo = new ArrayList<>();
+    static List<String> palabrasValidadas = new ArrayList<>();
+    static List<String> palabrasNoValidas = new ArrayList<>();
     public static void main (String[]args){
         String menu = """
                 1. Leer Archivo
@@ -48,32 +52,43 @@ public class Practica2 {
                         //Dividir la línea en palabras separadas por comas o espacios
                         String[] palabrasLinea = linea.split("[,\\s]+");
                         //Agregar las palabras al ArrayList
-                        palabras.addAll(Arrays.asList(palabrasLinea));
+                        palabrasDeArchivo.addAll(Arrays.asList(palabrasLinea));
                     }
+                    //cerrar lectura de archivo
                     br.close();
-
-                    System.out.println("Palabras en el archivo:");
-                    for (String palabra : palabras) {
-                        System.out.println(palabra);
-                    }
+                    JOptionPane.showMessageDialog(null, "Archivo leido con exito");
 
                 } catch (FileNotFoundException e) {
                     JOptionPane.showMessageDialog(null, "No se pudo abrir el archivo");
-                    System.out.println("No se pudo abrir el archivo");
+
                 } catch (IOException e) {
                     JOptionPane.showMessageDialog(null, "Conflicto para leer el archivo");
-                    System.out.println("Conflicto para leer el archivo");
+
                 }
                     break;
                 case 2:
+                    String titulo1 = "COINCIDENCIA EXITOSA";
+                    String titulo2 = "COINCIDENCIA NO VALIDA";
                     String expresionRegular = "(hola)+(0|1)*";
                     Pattern pattern = Pattern.compile(expresionRegular);
 
                     // se usa un foreach para evaluar el arraylist en cada elemento, el cual contiene elementos palabras
-                    for (String palabra:palabras) {
+                    for (String palabra:palabrasDeArchivo) {
                         boolean coincidencia = pattern.matcher(palabra).matches();
-                        System.out.println("Palabra: " + palabra + " - Coincide: " + coincidencia);
+                            if(coincidencia){
+                                palabrasValidadas.add(palabra);
+                            }else{
+                                palabrasNoValidas.add(palabra);
+                            }
+                        //System.out.println("Palabra: " + palabra + " - Coincide con : " + coincidencia);
                     }
+
+                    String palabrasValidadasString = String.join("\n",palabrasValidadas);
+                    String palabrasNoValidasString = String.join("\n",palabrasNoValidas);
+
+                    SalidaFormateada.imprimeConScroll("Las palabras que SI coinciden con la Expresion Regular "+expresionRegular+"\n"+"\n"+palabrasValidadasString,titulo1);
+                    SalidaFormateada.imprimeConScroll("Las palabras que NO coinciden con la Expresion Regular "+expresionRegular+"\n"+"\n"+palabrasNoValidasString,titulo2);
+
                     break;
                 case 3:
                     break;
@@ -82,7 +97,7 @@ public class Practica2 {
 
             }
         }catch (NumberFormatException e) {
-                JOptionPane.showMessageDialog(null, "Por favor, ingrese un número válido.");
+                JOptionPane.showMessageDialog(null, "Ingrese un número válido del menu.");
             }
         }
     }
