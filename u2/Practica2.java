@@ -25,7 +25,26 @@ public class Practica2 {
     static List<String> palabrasDeArchivo = new ArrayList<>();
     static List<String> palabrasValidadas = new ArrayList<>();
     static List<String> palabrasNoValidas = new ArrayList<>();
+
+    //Este metodo se usa para verificar que el archivo tenga contenido
+    private static boolean archivoTieneContenido() {
+        try {
+            FileReader fr = new FileReader(nombreArchivo);
+            BufferedReader br = new BufferedReader(fr);
+            boolean tieneContenido = br.readLine() != null; // Verificar si hay al menos una línea para leer
+            br.close();
+            return true;
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(null, "Conflicto para leer el archivo");
+            return false;
+        }
+    }
+    //Aqui se verifica que el archivo tenga contenido, si es asi se lee y se almacena en arraylists
     private static boolean leerArchivo(){
+        if (!archivoTieneContenido()) {
+            JOptionPane.showMessageDialog(null, "El archivo está vacío");
+            return false;
+        }
         try{
             FileReader fr = new FileReader(nombreArchivo);
             BufferedReader br = new BufferedReader(fr);
@@ -41,12 +60,13 @@ public class Practica2 {
             return true;
 
         }catch (FileNotFoundException e) {
-            JOptionPane.showMessageDialog(null, "No se pudo abrir el archivo");
+            JOptionPane.showMessageDialog(null, "No se pudo abrir el archivo, porque no existe o no se encuentra");
         } catch (IOException e) {
         JOptionPane.showMessageDialog(null, "Conflicto para leer el archivo");
         }
         return false;
     }
+    //Este metodo ejecuta la logica del programa a traves de un menu de opciones y verificaciones
     private static void realizarMenu(){
         String menu = """
                 1. Comparar Archivo con Lenguaje 1
@@ -57,9 +77,9 @@ public class Practica2 {
         int opcion = 0;
         while(opcion != 4){
             try{
-                opcion = Integer.parseInt(JOptionPane.showInputDialog(null,menu));
+                opcion = Integer.parseInt(JOptionPane.showInputDialog(null,menu,"MENU",JOptionPane.PLAIN_MESSAGE));
                 if (opcion < 1 || opcion > 4) {
-                    JOptionPane.showMessageDialog(null, "Por favor, ingrese una opción válida.");
+                    JOptionPane.showMessageDialog(null, "Ingrese una opción válida","ERROR",JOptionPane.ERROR_MESSAGE);
                     continue;
                 }
                 switch (opcion){
@@ -90,8 +110,8 @@ public class Practica2 {
 
                         SalidaFormateada.imprimeConScroll("Las palabras que SI coinciden con la Expresion Regular "+expresionRegular+"\n"+"\n"+palabrasValidadasString,titulo1);
                         SalidaFormateada.imprimeConScroll("Las palabras que NO coinciden con la Expresion Regular "+expresionRegular+"\n"+"\n"+palabrasNoValidasString,titulo2);
-
                         break;
+
                     case 2:
                         // Limpiar las listas antes de comenzar la comparación
                         palabrasValidadas.clear();
@@ -141,7 +161,9 @@ public class Practica2 {
                         SalidaFormateada.imprimeConScroll("Cadenas que NO coinciden con la ER"+expresionRegular2+"\n"+"\n"+palabrasNoValidasStringCaso3, titulo2Caso3);
 
                         break;
+
                     case 3:
+
                         break;
                     case 4:
                         JOptionPane.showMessageDialog(null, "Hasta luego");
@@ -154,7 +176,7 @@ public class Practica2 {
         }
     }
     public static void main (String[]args){
-        boolean archivoLeido = leerArchivo();
+        boolean archivoLeido = leerArchivo(); //se llama el segundo metodo
         if (!archivoLeido) {
             JOptionPane.showMessageDialog(null, "El archivo no pudo ser leído. Se cerrará la ventana.","Error",JOptionPane.ERROR_MESSAGE);
             return; // Salir del programa
