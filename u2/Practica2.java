@@ -33,24 +33,25 @@ public class Practica2 {
             BufferedReader br = new BufferedReader(fr);
             boolean tieneContenido = br.readLine() != null; // Verificar si hay al menos una línea para leer
             br.close();
-            return true;
+            return tieneContenido;
         } catch (IOException e) {
             JOptionPane.showMessageDialog(null, "Conflicto para leer el archivo");
             return false;
         }
     }
+
     //Aqui se verifica que el archivo tenga contenido, si es asi se lee y se almacena en arraylists
-    private static boolean leerArchivo(){
+    private static boolean leerArchivo() {
         if (!archivoTieneContenido()) {
             JOptionPane.showMessageDialog(null, "El archivo está vacío");
             return false;
         }
-        try{
+        try {
             FileReader fr = new FileReader(nombreArchivo);
             BufferedReader br = new BufferedReader(fr);
             String linea;
 
-            while((linea = br.readLine())!=null) {  //leer el archivo por lineas
+            while ((linea = br.readLine()) != null) {  //leer el archivo por lineas
                 String[] palabrasLinea = linea.split("[,\\s]+");    //Dividir la línea en palabras separadas por comas o espacios
                 palabrasDeArchivo.addAll(Arrays.asList(palabrasLinea)); //Agregar las palabras al ArrayList
             }
@@ -59,15 +60,16 @@ public class Practica2 {
             JOptionPane.showMessageDialog(null, "Archivo leido con exito");
             return true;
 
-        }catch (FileNotFoundException e) {
+        } catch (FileNotFoundException e) {
             JOptionPane.showMessageDialog(null, "No se pudo abrir el archivo, porque no existe o no se encuentra");
         } catch (IOException e) {
-        JOptionPane.showMessageDialog(null, "Conflicto para leer el archivo");
+            JOptionPane.showMessageDialog(null, "Conflicto para leer el archivo");
         }
         return false;
     }
+
     //Este metodo ejecuta la logica del programa a traves de un menu de opciones y verificaciones
-    private static void realizarMenu(){
+    private static void realizarMenu() {
         String menu = """
                 1. Comparar Archivo con Lenguaje 1
                 2. Comparar Archivo con Lenguaje 2
@@ -75,14 +77,14 @@ public class Practica2 {
                 4. Terminar
                 """;
         int opcion = 0;
-        while(opcion != 4){
-            try{
-                opcion = Integer.parseInt(JOptionPane.showInputDialog(null,menu,"MENU",JOptionPane.PLAIN_MESSAGE));
+        while (opcion != 4) {
+            try {
+                opcion = Integer.parseInt(JOptionPane.showInputDialog(null, menu, "MENU", JOptionPane.PLAIN_MESSAGE));
                 if (opcion < 1 || opcion > 4) {
-                    JOptionPane.showMessageDialog(null, "Ingrese una opción válida","ERROR",JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(null, "Ingrese una opción válida", "ERROR", JOptionPane.ERROR_MESSAGE);
                     continue;
                 }
-                switch (opcion){
+                switch (opcion) {
 
                     case 1:
                         // Limpiar las listas antes de comenzar la comparación
@@ -95,21 +97,21 @@ public class Practica2 {
                         Pattern pattern = Pattern.compile(expresionRegular);
 
                         // se usa un foreach para evaluar el arraylist en cada elemento, el cual contiene elementos palabras
-                        for (String palabra:palabrasDeArchivo) {
+                        for (String palabra : palabrasDeArchivo) {
                             boolean coincidencia = pattern.matcher(palabra).matches();
-                            if(coincidencia){
+                            if (coincidencia) {
                                 palabrasValidadas.add(palabra);
-                            }else{
+                            } else {
                                 palabrasNoValidas.add(palabra);
                             }
                             //System.out.println("Palabra: " + palabra + " - Coincide con : " + coincidencia);
                         }
 
-                        String palabrasValidadasString = String.join("\n",palabrasValidadas);
-                        String palabrasNoValidasString = String.join("\n",palabrasNoValidas);
+                        String palabrasValidadasString = String.join("\n", palabrasValidadas);
+                        String palabrasNoValidasString = String.join("\n", palabrasNoValidas);
 
-                        SalidaFormateada.imprimeConScroll("Las palabras que SI coinciden con la Expresion Regular "+expresionRegular+"\n"+"\n"+palabrasValidadasString,titulo1);
-                        SalidaFormateada.imprimeConScroll("Las palabras que NO coinciden con la Expresion Regular "+expresionRegular+"\n"+"\n"+palabrasNoValidasString,titulo2);
+                        SalidaFormateada.imprimeConScroll("Las palabras que SI coinciden con la Expresion Regular " + expresionRegular + "\n" + "\n" + palabrasValidadasString, titulo1);
+                        SalidaFormateada.imprimeConScroll("Las palabras que NO coinciden con la Expresion Regular " + expresionRegular + "\n" + "\n" + palabrasNoValidasString, titulo2);
                         break;
 
                     case 2:
@@ -157,8 +159,8 @@ public class Practica2 {
                         String palabrasNoValidasStringCaso3 = String.join("\n", palabrasNoValidas);
 
                         // Mostrar los resultados
-                        SalidaFormateada.imprimeConScroll("Cadenas que SI coinciden con la ER "+expresionRegular2+"\n"+"\n"+palabrasValidadasStringCaso3,titulo1Caso3);
-                        SalidaFormateada.imprimeConScroll("Cadenas que NO coinciden con la ER"+expresionRegular2+"\n"+"\n"+palabrasNoValidasStringCaso3, titulo2Caso3);
+                        SalidaFormateada.imprimeConScroll("Cadenas que SI coinciden con la ER " + expresionRegular2 + "\n" + "\n" + palabrasValidadasStringCaso3, titulo1Caso3);
+                        SalidaFormateada.imprimeConScroll("Cadenas que NO coinciden con la ER" + expresionRegular2 + "\n" + "\n" + palabrasNoValidasStringCaso3, titulo2Caso3);
 
                         break;
 
@@ -168,17 +170,18 @@ public class Practica2 {
                     case 4:
                         JOptionPane.showMessageDialog(null, "Hasta luego");
                         break;
-                        
+
                 }
-            }catch (NumberFormatException e) {
+            } catch (NumberFormatException e) {
                 JOptionPane.showMessageDialog(null, "Ingrese un número válido del menu.");
             }
         }
     }
-    public static void main (String[]args){
+
+    public static void main(String[] args) {
         boolean archivoLeido = leerArchivo(); //se llama el segundo metodo
         if (!archivoLeido) {
-            JOptionPane.showMessageDialog(null, "El archivo no pudo ser leído. Se cerrará la ventana.","Error",JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "El archivo no pudo ser leído. Se cerrará la ventana.", "Error", JOptionPane.ERROR_MESSAGE);
             return; // Salir del programa
         }
         realizarMenu();
