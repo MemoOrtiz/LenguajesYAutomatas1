@@ -232,6 +232,7 @@ public class Practica2 {
         }
     }
 
+    //se mandan a llamar los metodos anteriores para hacer funcional el programa
     public static void main(String[] args) {
         boolean archivoLeido = leerArchivo(); //se llama el segundo metodo
         if (!archivoLeido) {
