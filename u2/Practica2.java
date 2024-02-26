@@ -119,8 +119,8 @@ public class Practica2 {
                         palabrasValidadas.clear();
                         palabrasNoValidas.clear();
 
-                        String titulo1Caso3 = "COINCIDENCIA EXITOSA - Lenguaje 2";
-                        String titulo2Caso3 = "COINCIDENCIA NO VALIDA - Lenguaje 2";
+                        String titulo1Caso2 = "COINCIDENCIA EXITOSA - Lenguaje 2";
+                        String titulo2Caso2 = "COINCIDENCIA NO VALIDA - Lenguaje 2";
                         String expresionRegular2 = "(aa|bb)#+(123)*";
 
                         // Iterar sobre las palabras del archivo
@@ -159,8 +159,8 @@ public class Practica2 {
                         String palabrasNoValidasStringCaso3 = String.join("\n", palabrasNoValidas);
 
                         // Mostrar los resultados
-                        SalidaFormateada.imprimeConScroll("Cadenas que SI coinciden con la ER " + expresionRegular2 + "\n" + "\n" + palabrasValidadasStringCaso3, titulo1Caso3);
-                        SalidaFormateada.imprimeConScroll("Cadenas que NO coinciden con la ER" + expresionRegular2 + "\n" + "\n" + palabrasNoValidasStringCaso3, titulo2Caso3);
+                        SalidaFormateada.imprimeConScroll("Cadenas que SI coinciden con la ER " + expresionRegular2 + "\n" + "\n" + palabrasValidadasStringCaso3, titulo1Caso2);
+                        SalidaFormateada.imprimeConScroll("Cadenas que NO coinciden con la ER" + expresionRegular2 + "\n" + "\n" + palabrasNoValidasStringCaso3, titulo2Caso2);
 
                         break;
 
@@ -168,8 +168,8 @@ public class Practica2 {
                         // Limpiar las listas antes de comenzar la comparación
                         palabrasValidadas.clear();
                         palabrasNoValidas.clear();
-                        String titulo1Caso2 = "COINCIDENCIA EXITOSA - Lenguaje 2";
-                        String titulo2Caso2 = "COINCIDENCIA NO VALIDA - Lenguaje 2";
+                        String titulo1Caso3 = "COINCIDENCIA EXITOSA - Lenguaje 2";
+                        String titulo2Caso3 = "COINCIDENCIA NO VALIDA - Lenguaje 2";
                         String expresionRegular3 = "(a-f)*z+(x|y)";
 
                         // Iterar sobre las palabras del archivo
@@ -225,8 +225,8 @@ public class Practica2 {
                         String palabrasNoValidasStringCaso2 = String.join("\n", palabrasNoValidas);
 
                         // Mostrar los resultados
-                        SalidaFormateada.imprimeConScroll("Cadenas que SI coinciden con la ER " + expresionRegular3 + "\n" + "\n" + palabrasValidadasStringCaso2, titulo1Caso2);
-                        SalidaFormateada.imprimeConScroll("Cadenas que NO coinciden con la ER" + expresionRegular3 + "\n" + "\n" + palabrasNoValidasStringCaso2, titulo2Caso2);
+                        SalidaFormateada.imprimeConScroll("Cadenas que SI coinciden con la ER " + expresionRegular3 + "\n" + "\n" + palabrasValidadasStringCaso2, titulo1Caso3);
+                        SalidaFormateada.imprimeConScroll("Cadenas que NO coinciden con la ER" + expresionRegular3 + "\n" + "\n" + palabrasNoValidasStringCaso2, titulo2Caso3);
 
                         break;
                     case 4:
