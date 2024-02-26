@@ -3,3 +3,9 @@ ustedes,dos
 aaaaa
 ola
 hola buenos dias niños
+aa#123
+bb##
+aa##123123
+#123
+aabb##
+aabb#123123123
