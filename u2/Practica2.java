@@ -165,6 +165,68 @@ public class Practica2 {
                         break;
 
                     case 3:
+                        // Limpiar las listas antes de comenzar la comparación
+                        palabrasValidadas.clear();
+                        palabrasNoValidas.clear();
+                        String titulo1Caso2 = "COINCIDENCIA EXITOSA - Lenguaje 2";
+                        String titulo2Caso2 = "COINCIDENCIA NO VALIDA - Lenguaje 2";
+                        String expresionRegular3 = "(a-f)*z+(x|y)";
+
+                        // Iterar sobre las palabras del archivo
+                        for (String palabra : palabrasDeArchivo) {
+                            int index = 0;
+                            int length = palabra.length();
+
+                            // Verificar si la cadena cumple con el patrón
+                            //Primera condición. Como es opcional, puede o no cumplirse.
+                            //Entonces, utilizaré un contador y un while para saber en qué casilla cambia de condición
+                            int indice = 0;
+                            while((palabra.charAt(indice) == 'a') || (palabra.charAt(indice) == 'b') || (palabra.charAt(indice) == 'c')|| (palabra.charAt(indice) == 'd')
+                                    || (palabra.charAt(indice) == 'e')|| (palabra.charAt(indice) == 'f'))
+                            {
+                                indice++;//Ya tenemos la posición donde el carácter cambia hacia la siguiente posición
+                            }
+                            //Condición de una o más letras z
+                            //Aqui ya podemos empezar a descartar cadenas si no coinciden porque es una condicion obligatoria
+                            if ((palabra.charAt(indice) != 'z')) {
+                                palabrasNoValidas.add(palabra);
+                                continue; // Saltar a la siguiente palabra
+                            }
+                            else{
+                                indice++;
+                            }
+                            //Ciclo while para verificar si se sigue en la condicion 2
+                            while((palabra.charAt(indice) == 'z'))
+                            {
+                                indice++;
+                            }
+                            //condicion 3: una letra x o y
+                            if ((palabra.charAt(indice) != 'x')&& (palabra.charAt(indice) != 'y'))
+                            {
+                                palabrasNoValidas.add(palabra);
+                                continue; // Saltar a la siguiente palabra
+                            }
+                            else
+                            {
+                                indice++;
+                            }
+                            //Este deberia ser el ultimo caracter, por lo que si se añade uno mas, no coincidiria con la condicion
+                            //para verificar esto vamos a comparar el indice con la longitud de la palabra. Si coinciden, finalmente sera
+                            //una cadena valida
+                            if (indice == length) {
+                                palabrasValidadas.add(palabra);
+                            } else {
+                                palabrasNoValidas.add(palabra);
+                            }
+
+                        }
+                        // Convertir las listas a cadenas
+                        String palabrasValidadasStringCaso2 = String.join("\n", palabrasValidadas);
+                        String palabrasNoValidasStringCaso2 = String.join("\n", palabrasNoValidas);
+
+                        // Mostrar los resultados
+                        SalidaFormateada.imprimeConScroll("Cadenas que SI coinciden con la ER " + expresionRegular3 + "\n" + "\n" + palabrasValidadasStringCaso2, titulo1Caso2);
+                        SalidaFormateada.imprimeConScroll("Cadenas que NO coinciden con la ER" + expresionRegular3 + "\n" + "\n" + palabrasNoValidasStringCaso2, titulo2Caso2);
 
                         break;
                     case 4:
