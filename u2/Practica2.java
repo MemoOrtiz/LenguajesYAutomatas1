@@ -174,52 +174,38 @@ public class Practica2 {
 
                         // Iterar sobre las palabras del archivo
                         for (String palabra : palabrasDeArchivo) {
-                            int index = 0;
+                            int indice = 0; // Inicializamos el índice al principio de la palabra
                             int length = palabra.length();
+                            boolean cumplePatron = true;
 
                             // Verificar si la cadena cumple con el patrón
                             //Primera condición. Como es opcional, puede o no cumplirse.
                             //Entonces, utilizaré un contador y un while para saber en qué casilla cambia de condición
-                            int indice = 0;
-                            while((palabra.charAt(indice) == 'a') || (palabra.charAt(indice) == 'b') || (palabra.charAt(indice) == 'c')|| (palabra.charAt(indice) == 'd')
-                                    || (palabra.charAt(indice) == 'e')|| (palabra.charAt(indice) == 'f'))
-                            {
-                                indice++;//Ya tenemos la posición donde el carácter cambia hacia la siguiente posición
+                            while (indice < length && (palabra.charAt(indice) >= 'a' && palabra.charAt(indice) <= 'f')) {
+                                indice++; // Avanzamos en el índice mientras el carácter esté entre 'a' y 'f'
                             }
+
                             //Condición de una o más letras z
                             //Aqui ya podemos empezar a descartar cadenas si no coinciden porque es una condicion obligatoria
-                            if ((palabra.charAt(indice) != 'z')) {
-                                palabrasNoValidas.add(palabra);
-                                continue; // Saltar a la siguiente palabra
+                            while (indice < length && palabra.charAt(indice) == 'z') {
+                                indice++; // Avanzamos al siguiente carácter después de 'z'
                             }
-                            else{
-                                indice++;
+
+                            // Verificar la condición 3: una letra x o y
+                            if (indice < length && (palabra.charAt(indice) != 'x' && palabra.charAt(indice) != 'y')) {
+                                cumplePatron = false; // Si no es 'x' ni 'y', la palabra no cumple el patrón
+                            } else {
+                                indice++; // Avanzamos al siguiente carácter después de 'x' o 'y'
                             }
-                            //Ciclo while para verificar si se sigue en la condicion 2
-                            while((palabra.charAt(indice) == 'z'))
-                            {
-                                indice++;
-                            }
-                            //condicion 3: una letra x o y
-                            if ((palabra.charAt(indice) != 'x')&& (palabra.charAt(indice) != 'y'))
-                            {
-                                palabrasNoValidas.add(palabra);
-                                continue; // Saltar a la siguiente palabra
-                            }
-                            else
-                            {
-                                indice++;
-                            }
-                            //Este deberia ser el ultimo caracter, por lo que si se añade uno mas, no coincidiria con la condicion
-                            //para verificar esto vamos a comparar el indice con la longitud de la palabra. Si coinciden, finalmente sera
-                            //una cadena valida
-                            if (indice == length) {
+
+                            // Si hemos llegado al final de la palabra y todas las condiciones se cumplieron, es una palabra válida
+                            if (indice == length && cumplePatron) {
                                 palabrasValidadas.add(palabra);
                             } else {
                                 palabrasNoValidas.add(palabra);
                             }
-
                         }
+
                         // Convertir las listas a cadenas
                         String palabrasValidadasStringCaso2 = String.join("\n", palabrasValidadas);
                         String palabrasNoValidasStringCaso2 = String.join("\n", palabrasNoValidas);
