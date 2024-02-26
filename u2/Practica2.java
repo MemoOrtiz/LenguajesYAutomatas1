@@ -21,19 +21,23 @@ Se deberá probar al menos 3 ejemplos de cada expresión regular, considere mane
 y diseño lógico del programa acorde al paradigma asociado al lenguaje de programación
  */
 public class Practica2 {
+    //Aqui se almacenan las variables estaticas durante la ejecucion de la clase
+    //Decidi usar List para tener flexibilidad en algun momento, de ser necesario
+    //un cambio de estructura de datos.
     static String nombreArchivo = "./u2/practica2.txt";
     static List<String> palabrasDeArchivo = new ArrayList<>();
     static List<String> palabrasValidadas = new ArrayList<>();
     static List<String> palabrasNoValidas = new ArrayList<>();
 
-    //Este metodo se usa para verificar que el archivo tenga contenido
+    //Este metodo se usa para verificar que el archivo tenga contenido, por lo que
+    //es de tipo boolean
     private static boolean archivoTieneContenido() {
         try {
             FileReader fr = new FileReader(nombreArchivo);
             BufferedReader br = new BufferedReader(fr);
             boolean tieneContenido = br.readLine() != null; // Verificar si hay al menos una línea para leer
             br.close();
-            return tieneContenido;
+            return tieneContenido; //retorno "true"
         } catch (IOException e) {
             JOptionPane.showMessageDialog(null, "Conflicto para leer el archivo");
             return false;
@@ -41,6 +45,7 @@ public class Practica2 {
     }
 
     //Aqui se verifica que el archivo tenga contenido, si es asi se lee y se almacena en arraylists
+    //y si no se lanza una excepcion
     private static boolean leerArchivo() {
         if (!archivoTieneContenido()) {
             JOptionPane.showMessageDialog(null, "El archivo está vacío");
@@ -70,6 +75,7 @@ public class Practica2 {
 
     //Este metodo ejecuta la logica del programa a traves de un menu de opciones y verificaciones
     private static void realizarMenu() {
+        //formato del string del menu
         String menu = """
                 1. Comparar Archivo con Lenguaje 1
                 2. Comparar Archivo con Lenguaje 2
@@ -77,10 +83,10 @@ public class Practica2 {
                 4. Terminar
                 """;
         int opcion = 0;
-        while (opcion != 4) {
+        while (opcion != 4) {//ciclo while para iterar un switch case para hacer multiples opciones
             try {
                 opcion = Integer.parseInt(JOptionPane.showInputDialog(null, menu, "MENU", JOptionPane.PLAIN_MESSAGE));
-                if (opcion < 1 || opcion > 4) {
+                if (opcion < 1 || opcion > 4) { //verificacion de rango de opciones
                     JOptionPane.showMessageDialog(null, "Ingrese una opción válida", "ERROR", JOptionPane.ERROR_MESSAGE);
                     continue;
                 }
