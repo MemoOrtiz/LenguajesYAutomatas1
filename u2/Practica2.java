@@ -21,6 +21,15 @@ Se deberá probar al menos 3 ejemplos de cada expresión regular, considere mane
 y diseño lógico del programa acorde al paradigma asociado al lenguaje de programación
  */
 public class Practica2 {
+    //se mandan a llamar los metodos anteriores para hacer funcional el programa
+    public static void main(String[] args) {
+        boolean archivoLeido = leerArchivo(); //se llama el segundo metodo
+        if (!archivoLeido) {
+            JOptionPane.showMessageDialog(null, "El archivo no pudo ser leído. Se cerrará la ventana.", "Error", JOptionPane.ERROR_MESSAGE);
+            return; // Salir del programa
+        }
+        realizarMenu();
+    }
     //Aqui se almacenan las variables estaticas durante la ejecucion de la clase
     //Decidi usar List para tener flexibilidad en algun momento, de ser necesario
     //un cambio de estructura de datos.
@@ -232,13 +241,5 @@ public class Practica2 {
         }
     }
 
-    //se mandan a llamar los metodos anteriores para hacer funcional el programa
-    public static void main(String[] args) {
-        boolean archivoLeido = leerArchivo(); //se llama el segundo metodo
-        if (!archivoLeido) {
-            JOptionPane.showMessageDialog(null, "El archivo no pudo ser leído. Se cerrará la ventana.", "Error", JOptionPane.ERROR_MESSAGE);
-            return; // Salir del programa
-        }
-        realizarMenu();
-    }
+
 }

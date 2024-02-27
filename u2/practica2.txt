@@ -11,3 +11,15 @@ aabb##
 aabb#123123123
 abczzy
 fzzzx
+zx
+zy
+azx
+acczzy
+abcdefzx
+fedcbazzzzy
+zw
+zxx
+gzy
+abcz
+dacfzyy
+badczzzzzyz
