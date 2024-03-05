@@ -1,25 +1,3 @@
-hola,como,estan
-ustedes,dos
-aaaaa
-ola
-hola buenos dias niños
-aa#123
-bb##
-aa##123123
-#123
-aabb##
-aabb#123123123
-abczzy
-fzzzx
-zx
-zy
+holahola, aaaa#1234
 azx
-acczzy
-abcdefzx
-fedcbazzzzy
-zw
-zxx
-gzy
-abcz
-dacfzyy
-badczzzzzyz
+azxy
