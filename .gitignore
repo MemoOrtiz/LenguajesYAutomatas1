@@ -3,3 +3,5 @@
 out/
 *.docx
 Apuntes/Tareas/
+*.jar
+*.pdf
