@@ -1,4 +1,4 @@
-package u2;
+package u3;
 
 import misUtilerias.SalidaFormateada;
 
@@ -12,16 +12,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Pattern;
 
-/*
-La aplicación o programa puede recibir como entrada:
-•	leer un archivo de texto
-Y mostrar la clasificación de cada cadena o palabra de acuerdo al lenguaje definido
-(haciendo uso del manejo de la expresión regular o simulacion con programacion).
-Se deberá probar al menos 3 ejemplos de cada expresión regular, considere manejo errores
-y diseño lógico del programa acorde al paradigma asociado al lenguaje de programación
- */
-public class Practica2 {
-    //se mandan a llamar los metodos anteriores para hacer funcional el programa
+public class Practica3 {
     public static void main(String[] args) {
         boolean archivoLeido = leerArchivo(); //se llama el segundo metodo
         if (!archivoLeido) {
@@ -33,7 +24,7 @@ public class Practica2 {
     //Aqui se almacenan las variables estaticas durante la ejecucion de la clase
     //Decidi usar List para tener flexibilidad en algun momento, de ser necesario
     //un cambio de estructura de datos.
-    static String nombreArchivo = "./u2/practica2.txt";
+    static String nombreArchivo = "./u3/practica3.txt";
     static List<String> palabrasDeArchivo = new ArrayList<>();
     static List<String> palabrasValidadas = new ArrayList<>();
     static List<String> palabrasNoValidas = new ArrayList<>();
@@ -65,10 +56,16 @@ public class Practica2 {
             BufferedReader br = new BufferedReader(fr);
             String linea;
 
+            String[] palabrasLinea = new String[0];
             while ((linea = br.readLine()) != null) {  //leer el archivo por lineas
-                String[] palabrasLinea = linea.split("[,\\s]+");    //Dividir la línea en palabras separadas por comas o espacios
+                palabrasLinea = linea.split("[,\n]+");
                 palabrasDeArchivo.addAll(Arrays.asList(palabrasLinea)); //Agregar las palabras al ArrayList
             }
+            for (String palabra : palabrasLinea) {
+                palabrasDeArchivo.add(palabra.trim()); // Agregar la palabra después de eliminar los espacios en blanco
+            }
+
+
 
             br.close();//cerrar lectura de archivo
             JOptionPane.showMessageDialog(null, "Archivo leido con exito");
@@ -86,9 +83,9 @@ public class Practica2 {
     private static void realizarMenu() {
         //formato del string del menu
         String menu = """
-                1. Comparar Archivo con Lenguaje 1
-                2. Comparar Archivo con Lenguaje 2
-                3. Comparar Archivo con Lenguaje 3
+                1. Comparar Archivo con Identificadores en Java
+                2. Comparar Archivo con Números enteros y reales en lenguaje C
+                3. Comparar Archivo con Operadores aritméticos, lógicos y relacionales en PYTHON
                 4. Terminar
                 """;
         int opcion = 0;
@@ -108,25 +105,29 @@ public class Practica2 {
 
                         String titulo1 = "COINCIDENCIA EXITOSA";
                         String titulo2 = "COINCIDENCIA NO VALIDA";
-                        String expresionRegular = "(hola)+(0|1)*";
-                        Pattern pattern = Pattern.compile(expresionRegular);
+                        String expresionRegular1 = "$*_*[a-zA-Z]+[a-zA-Z0-9_$]*";
 
-                        // se usa un foreach para evaluar el arraylist en cada elemento, el cual contiene elementos palabras
-                        for (String palabra : palabrasDeArchivo) {
-                            boolean coincidencia = pattern.matcher(palabra).matches();
+                        // La expresión regular para identificadores de Java
+                        String regex ="\\$*_*[a-zA-Z]+[a-zA-Z0-9_$]*";
+
+                        // Compilar la expresión regular en un patrón
+                        Pattern pattern = Pattern.compile(regex);
+
+                        // Verificar si la cadena coincide con el patrón
+                        for(String palabraLeida: palabrasDeArchivo){
+                            boolean coincidencia = pattern.matcher(palabraLeida).matches();
                             if (coincidencia) {
-                                palabrasValidadas.add(palabra);
+                                palabrasValidadas.add(palabraLeida);
                             } else {
-                                palabrasNoValidas.add(palabra);
+                                palabrasNoValidas.add(palabraLeida);
                             }
-                            //System.out.println("Palabra: " + palabra + " - Coincide con : " + coincidencia);
                         }
 
                         String palabrasValidadasString = String.join("\n", palabrasValidadas);
                         String palabrasNoValidasString = String.join("\n", palabrasNoValidas);
 
-                        SalidaFormateada.imprimeConScroll("Las palabras que SI coinciden con la Expresion Regular " + expresionRegular + "\n" + "\n" + palabrasValidadasString, titulo1);
-                        SalidaFormateada.imprimeConScroll("Las palabras que NO coinciden con la Expresion Regular " + expresionRegular + "\n" + "\n" + palabrasNoValidasString, titulo2);
+                        SalidaFormateada.imprimeConScroll("Las palabras que SI coinciden con la Expresion Regular " + expresionRegular1 + "\n" + "\n" + palabrasValidadasString, titulo1);
+                        SalidaFormateada.imprimeConScroll("Las palabras que NO coinciden con la Expresion Regular " + expresionRegular1 + "\n" + "\n" + palabrasNoValidasString, titulo2);
 
                         break;
 
@@ -134,7 +135,7 @@ public class Practica2 {
                         // Limpiar las listas antes de comenzar la comparación
                         palabrasValidadas.clear();
                         palabrasNoValidas.clear();
-
+                        
                         String titulo1Caso2 = "COINCIDENCIA EXITOSA - Lenguaje 2";
                         String titulo2Caso2 = "COINCIDENCIA NO VALIDA - Lenguaje 2";
                         String expresionRegular2 = "(aa|bb)#+(123)*";
@@ -181,54 +182,6 @@ public class Practica2 {
                         break;
 
                     case 3:
-                        // Limpiar las listas antes de comenzar la comparación
-                        palabrasValidadas.clear();
-                        palabrasNoValidas.clear();
-                        String titulo1Caso3 = "COINCIDENCIA EXITOSA - Lenguaje 2";
-                        String titulo2Caso3 = "COINCIDENCIA NO VALIDA - Lenguaje 2";
-                        String expresionRegular3 = "(a-f)*z+(x|y)";
-
-                        // Iterar sobre las palabras del archivo
-                        for (String palabra : palabrasDeArchivo) {
-                            int indice = 0; // Inicializamos el índice al principio de la palabra
-                            int length = palabra.length();
-                            boolean cumplePatron = true;
-
-                            // Verificar si la cadena cumple con el patrón
-                            //Primera condición. Como es opcional, puede o no cumplirse.
-                            //Entonces, utilizaré un contador y un while para saber en qué casilla cambia de condición
-                            while (indice < length && (palabra.charAt(indice) >= 'a' && palabra.charAt(indice) <= 'f')) {
-                                indice++; // Avanzamos en el índice mientras el carácter esté entre 'a' y 'f'
-                            }
-
-                            //Condición de una o más letras z
-                            //Aqui ya podemos empezar a descartar cadenas si no coinciden porque es una condicion obligatoria
-                            while (indice < length && palabra.charAt(indice) == 'z') {
-                                indice++; // Avanzamos al siguiente carácter después de 'z'
-                            }
-
-                            // Verificar la condición 3: una letra x o y
-                            if (indice < length && (palabra.charAt(indice) != 'x' && palabra.charAt(indice) != 'y')) {
-                                cumplePatron = false; // Si no es 'x' ni 'y', la palabra no cumple el patrón
-                            } else {
-                                indice++; // Avanzamos al siguiente carácter después de 'x' o 'y'
-                            }
-
-                            // Si hemos llegado al final de la palabra y todas las condiciones se cumplieron, es una palabra válida
-                            if (indice == length && cumplePatron) {
-                                palabrasValidadas.add(palabra);
-                            } else {
-                                palabrasNoValidas.add(palabra);
-                            }
-                        }
-
-                        // Convertir las listas a cadenas
-                        String palabrasValidadasStringCaso2 = String.join("\n", palabrasValidadas);
-                        String palabrasNoValidasStringCaso2 = String.join("\n", palabrasNoValidas);
-
-                        // Mostrar los resultados
-                        SalidaFormateada.imprimeConScroll("Cadenas que SI coinciden con la ER " + expresionRegular3 + "\n" + "\n" + palabrasValidadasStringCaso2, titulo1Caso3);
-                        SalidaFormateada.imprimeConScroll("Cadenas que NO coinciden con la ER" + expresionRegular3 + "\n" + "\n" + palabrasNoValidasStringCaso2, titulo2Caso3);
 
                         break;
                     case 4:
@@ -241,6 +194,4 @@ public class Practica2 {
             }
         }
     }
-
-
 }
