@@ -127,7 +127,6 @@ public class Practica2 {
 
                         SalidaFormateada.imprimeConScroll("Las palabras que SI coinciden con la Expresion Regular " + expresionRegular + "\n" + "\n" + palabrasValidadasString, titulo1);
                         SalidaFormateada.imprimeConScroll("Las palabras que NO coinciden con la Expresion Regular " + expresionRegular + "\n" + "\n" + palabrasNoValidasString, titulo2);
-
                         break;
 
                     case 2:
