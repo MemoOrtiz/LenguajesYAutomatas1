@@ -56,15 +56,12 @@ public class Practica3 {
             BufferedReader br = new BufferedReader(fr);
             String linea;
 
+
             String[] palabrasLinea = new String[0];
             while ((linea = br.readLine()) != null) {  //leer el archivo por lineas
-                palabrasLinea = linea.split("[,\n]+");
-                palabrasDeArchivo.addAll(Arrays.asList(palabrasLinea)); //Agregar las palabras al ArrayList
-            }
-            for (String palabra : palabrasLinea) {
-                palabrasDeArchivo.add(palabra.trim()); // Agregar la palabra después de eliminar los espacios en blanco
-            }
-
+                    palabrasLinea = linea.split("[,\n]+");
+                    palabrasDeArchivo.addAll(Arrays.asList(palabrasLinea)); //Agregar las palabras al ArrayList
+                }
 
 
             br.close();//cerrar lectura de archivo
@@ -89,7 +86,7 @@ public class Practica3 {
                 4. Terminar
                 """;
         int opcion = 0;
-        while (opcion != 4) {//ciclo while para iterar un switch case para hacer multiples opciones
+        while (true) {//ciclo while para iterar un switch case para hacer multiples opciones
             try {
                 opcion = Integer.parseInt(JOptionPane.showInputDialog(null, menu, "MENU", JOptionPane.PLAIN_MESSAGE));
                 if (opcion < 1 || opcion > 4) { //verificacion de rango de opciones
@@ -107,7 +104,57 @@ public class Practica3 {
                         String titulo2 = "COINCIDENCIA NO VALIDA";
                         String expresionRegular1 = "$*_*[a-zA-Z]+[a-zA-Z0-9_$]*";
 
-                        // La expresión regular para identificadores de Java
+                        int[][] tabla_transicion = {
+                                {1, 0, 4},
+                                {1, 2, 3},
+                                {1, 2, 3},
+                                {1, 2, 3},
+                                {4, 4, 4}
+                        };
+
+                        int[] estados_finales = {1, 2, 3};
+
+
+                        for (String palabra : palabrasDeArchivo) {
+                        int estadoActual = 0;
+                        //boolean esValido = false;
+                        for (char c : palabra.toCharArray()) {
+                            int column;
+                            if ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z')) {
+                                column = 0; // [a-z][A-Z]
+                            } else if (c == '$' || c == '_') {
+                                column = 1; // $,_
+                            } else if (c >= '0' && c <= '9') {
+                                column = 2; // [0-9]
+                            } else {
+                                break; // Caracter no válido
+                            }
+                            estadoActual = tabla_transicion[estadoActual][column];
+                        }
+
+                        boolean encontrado = false;
+                        for (int estadoFinal : estados_finales) {
+                            if (estadoActual == estadoFinal) {
+                                //esValido = true;
+                                encontrado = true;
+                                break;
+                            }
+                        }
+
+                        if (encontrado) {
+                            palabrasValidadas.add(palabra);
+                        } else {
+                            palabrasNoValidas.add(palabra);
+                        }
+                    }
+                        String palabrasValidadasString = String.join("\n", palabrasValidadas);
+                        String palabrasNoValidasString = String.join("\n", palabrasNoValidas);
+
+                        SalidaFormateada.imprimeConScroll("Las palabras que SI coinciden con la Expresion Regular " + expresionRegular1 + "\n" + "\n" + palabrasValidadasString, titulo1);
+                        SalidaFormateada.imprimeConScroll("Las palabras que NO coinciden con la Expresion Regular " + expresionRegular1 + "\n" + "\n" + palabrasNoValidasString, titulo2);
+                        
+
+                       /* // La expresión regular para identificadores de Java
                         String regex ="\\$*_*[a-zA-Z]+[a-zA-Z0-9_$]*";
 
                         // Compilar la expresión regular en un patrón
@@ -128,7 +175,7 @@ public class Practica3 {
 
                         SalidaFormateada.imprimeConScroll("Las palabras que SI coinciden con la Expresion Regular " + expresionRegular1 + "\n" + "\n" + palabrasValidadasString, titulo1);
                         SalidaFormateada.imprimeConScroll("Las palabras que NO coinciden con la Expresion Regular " + expresionRegular1 + "\n" + "\n" + palabrasNoValidasString, titulo2);
-
+*/
                         break;
 
                     case 2:
@@ -138,46 +185,7 @@ public class Practica3 {
                         
                         String titulo1Caso2 = "COINCIDENCIA EXITOSA - Lenguaje 2";
                         String titulo2Caso2 = "COINCIDENCIA NO VALIDA - Lenguaje 2";
-                        String expresionRegular2 = "(aa|bb)#+(123)*";
-
-                        // Iterar sobre las palabras del archivo
-                        for (String palabra : palabrasDeArchivo) {
-                            int index = 0;
-                            int length = palabra.length();
-
-                            // Verificar si la cadena cumple con el patrón
-                            if (length < 2 || (palabra.charAt(0) != 'a' && palabra.charAt(0) != 'b') || palabra.charAt(0) != palabra.charAt(1)) {
-                                palabrasNoValidas.add(palabra);
-                                continue; // Saltar a la siguiente palabra
-                            }
-
-                            index += 2; // Avanzar el índice si la cadena comienza con "aa" o "bb"
-
-                            // Verificar la presencia de "#" después de "aa" o "bb"
-                            while (index < length && palabra.charAt(index) == '#') {
-                                index++; // Avanzar el índice si encuentra "#"
-                            }
-
-                            // Verificar la presencia de "123" después de los "#"
-                            while (index + 3 <= length && palabra.charAt(index) == '1' && palabra.charAt(index + 1) == '2' && palabra.charAt(index + 2) == '3') {
-                                index += 3; // Avanzar el índice si encuentra "123"
-                            }
-
-                            // Si el índice alcanza la longitud de la palabra, es válida
-                            if (index == length) {
-                                palabrasValidadas.add(palabra);
-                            } else {
-                                palabrasNoValidas.add(palabra);
-                            }
-                        }
-
-                        // Convertir las listas a cadenas
-                        String palabrasValidadasStringCaso3 = String.join("\n", palabrasValidadas);
-                        String palabrasNoValidasStringCaso3 = String.join("\n", palabrasNoValidas);
-
-                        // Mostrar los resultados
-                        SalidaFormateada.imprimeConScroll("Cadenas que SI coinciden con la ER " + expresionRegular2 + "\n" + "\n" + palabrasValidadasStringCaso3, titulo1Caso2);
-                        SalidaFormateada.imprimeConScroll("Cadenas que NO coinciden con la ER" + expresionRegular2 + "\n" + "\n" + palabrasNoValidasStringCaso3, titulo2Caso2);
+                        String expresionRegular2 ;
 
                         break;
 
@@ -186,7 +194,7 @@ public class Practica3 {
                         break;
                     case 4:
                         JOptionPane.showMessageDialog(null, "Hasta luego");
-                        break;
+                        return;
 
                 }
             } catch (NumberFormatException e) {
