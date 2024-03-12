@@ -212,7 +212,7 @@ public class Practica3 {
                                         fw.write(palabraValidada + ", " + "identificador" + "\n");
                                     }
                                     // Mostrar mensaje de éxito
-                                    JOptionPane.showMessageDialog(null, "Contenido de palabras validadas guardado en el nuevo nuevo.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+                                    JOptionPane.showMessageDialog(null, "Contenido de palabras validadas guardado en el nuevo archivo.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
                                 }
                             } catch (IOException e) {
                                 JOptionPane.showMessageDialog(null, "Hubo un error al crear en el archivo.", "Error", JOptionPane.ERROR_MESSAGE);
@@ -353,6 +353,7 @@ public class Practica3 {
                         // Limpiar las listas antes de comenzar la comparación
                         palabrasValidadas.clear();
                         palabrasNoValidas.clear();
+                        operadoresValidos.clear();
 
                         String titulo1Case3 = "COINCIDENCIA EXITOSA";
                         String titulo2Case3 = "COINCIDENCIA NO VALIDA";
@@ -448,6 +449,21 @@ public class Practica3 {
                         SalidaFormateada.imprimeConScroll("Palabras que NO coinciden con la ER " + expresionRegularCase3 + "\n" +
                                 "\n" + palabrasNoValidasStringCase3, titulo2Case3);
 
+                        try {
+                            try (FileWriter fw = new FileWriter(archivo, true)) {
+                                if (archivo.length() == 0) {
+                                    fw.write("CADENA---COMPONENTE LEXICO\n");
+                                }
+                                for (String operadorValidad : operadoresValidos) {
+
+                                    fw.write(operadorValidad + ", " + "operador"+ "\n");
+                                }
+                                // Mostrar mensaje de éxito
+                                JOptionPane.showMessageDialog(null, "Contenido de palabras validadas guardado en el archivo ", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+                            }
+                        } catch (IOException e) {
+                            JOptionPane.showMessageDialog(null, "Hubo un error al crear en el archivo.", "Error", JOptionPane.ERROR_MESSAGE);
+                        }
                         break;
                     case 4:
                         JOptionPane.showMessageDialog(null, "Hasta luego");
