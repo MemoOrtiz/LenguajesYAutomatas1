@@ -18,6 +18,7 @@ public class Practica3 {
         }
         realizarMenu();
     }
+
     //Aqui se almacenan las variables estaticas durante la ejecucion de la clase
     //Decidi usar List para tener flexibilidad en algun momento, de ser necesario
     //un cambio de estructura de datos.
@@ -25,7 +26,12 @@ public class Practica3 {
     static List<String> palabrasDeArchivo = new ArrayList<>();
     static List<String> palabrasValidadas = new ArrayList<>();
     static List<String> palabrasNoValidas = new ArrayList<>();
-    static String nombreArchivoNuevo = "./u3/resultadoPractica3";
+    static List<String> palabrasValidasIdentificadores = new ArrayList<>();
+    static List<String> palabrasValidasNumeros = new ArrayList<>();
+    static List<String> operadoresValidos = new ArrayList<>();
+
+    static String nombreArchivoNuevo = "./u3/resultadoPractica3.txt";
+    static File archivo = new File(nombreArchivoNuevo);
 
     //Este metodo se usa para verificar que el archivo tenga contenido, por lo que
     //es de tipo boolean
@@ -57,10 +63,9 @@ public class Practica3 {
 
             String[] palabrasLinea = new String[0];
             while ((linea = br.readLine()) != null) {  //leer el archivo por lineas
-                    palabrasLinea = linea.split("[,\n]+");
-                    palabrasDeArchivo.addAll(Arrays.asList(palabrasLinea)); //Agregar las palabras al ArrayList
-                }
-
+                palabrasLinea = linea.split("[,\n]+");
+                palabrasDeArchivo.addAll(Arrays.asList(palabrasLinea)); //Agregar las palabras al ArrayList
+            }
 
             br.close();//cerrar lectura de archivo
             JOptionPane.showMessageDialog(null, "Archivo leido con exito");
@@ -101,9 +106,9 @@ public class Practica3 {
 
                         String titulo1 = "COINCIDENCIA EXITOSA";
                         String titulo2 = "COINCIDENCIA NO VALIDA";
-                        String expresionRegular1 = "$*_*[a-zA-Z]+[a-zA-Z0-9_$]*";
+                        String expresionRegular1 = "($ U _ U [a-z][A-Z]) $* U _* U( [a-z][A-Z])* U [0-9]*";
 
-                        int [][] tabla = {
+                        int[][] tabla = {
                                 {2, 3, 4, 1},
                                 {1, 1, 1, 1},
                                 {8, 6, 4, 5},
@@ -114,66 +119,109 @@ public class Practica3 {
                                 {7, 6, 4, 5},
                                 {8, 6, 4, 5}
                         };
-                        int[] estados_finales = {3,4,5,6,7,8};
+                        int[] estados_finales = {3, 4, 5, 6, 7, 8};
 
                         for (String palabra : palabrasDeArchivo) {
-                        int estadoActual = 0;
+                            int estadoActual = 0;
 
-                        for (char c : palabra.toCharArray()) {
+                            for (char c : palabra.toCharArray()) {
 
-                            int column;
+                                int column;
 
-                            if(c == '_'){
-                                column = 0;// _
-                            } else if (c == '$') {
-                                column = 1;// $
-                            } else if ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z')) {
-                                column = 2; // [a-z][A-Z]
-                            } else if (c >= '0' && c <= '9') {
-                                column = 3; // [0-9]
+                                if (c == '_') {
+                                    column = 0;// _
+                                } else if (c == '$') {
+                                    column = 1;// $
+                                } else if ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z')) {
+                                    column = 2; // [a-z][A-Z]
+                                } else if (c >= '0' && c <= '9') {
+                                    column = 3; // [0-9]
+                                } else {
+                                    break;   //cualquier otro caso
+                                }
+                                estadoActual = tabla[estadoActual][column]; //aqui se maneja en la matriz tabla[][]
+                                //el valor del estado actual por medio de la ubicacion
+                            }
+
+                            boolean encontrado = false;
+                            for (int estadoFinal : estados_finales) {
+                                if (estadoActual == estadoFinal) {
+                                    encontrado = true;
+                                    break;
+                                }
+                            }
+
+                            if (encontrado) {
+                                palabrasValidadas.add(palabra);
+                                palabrasValidasIdentificadores.add(palabra);
                             } else {
-                                break;
-                            }
-                                estadoActual = tabla[estadoActual][column];
-                        }
-
-                        boolean encontrado = false;
-                        for (int estadoFinal : estados_finales) {
-                            if (estadoActual == estadoFinal) {
-                                encontrado = true;
-                                break;
+                                palabrasNoValidas.add(palabra);
                             }
                         }
-
-                        if (encontrado) {
-                            palabrasValidadas.add(palabra);
-                        } else {
-                            palabrasNoValidas.add(palabra);
-                        }
-                    }
-                        String palabrasValidadasString = String.join("\n", palabrasValidadas);
+                        String palabrasValidadasString = String.join("\n", palabrasValidasIdentificadores);
                         String palabrasNoValidasString = String.join("\n", palabrasNoValidas);
 
                         SalidaFormateada.imprimeConScroll("Las palabras que SI coinciden con la Expresion Regular " + expresionRegular1 + "\n" + "\n" + palabrasValidadasString, titulo1);
                         SalidaFormateada.imprimeConScroll("Las palabras que NO coinciden con la Expresion Regular " + expresionRegular1 + "\n" + "\n" + palabrasNoValidasString, titulo2);
 
 
-                        String identificador = "identificador";
+                        if (archivo.exists()) {
+                            try (FileReader fr = new FileReader(archivo);
+                                 BufferedReader br = new BufferedReader(fr)) {
+                                // Leer el archivo línea por línea
+                                String linea;
+                                boolean contenidoExistente = false;
+                                while ((linea = br.readLine()) != null) {
+                                    // Verificar si la palabra validada ya existe en el archivo
+                                    for (String palabraValidada : palabrasValidadas) {
+                                        if (linea.contains(palabraValidada)) {
+                                            contenidoExistente = true;
+                                            break;
+                                        }
+                                    }
+                                }
+                                if (contenidoExistente) {
+                                    continue;
+                                } else {
+                                    // Crear FileWriter y escribir en el archivo si existe
+                                    try (FileWriter fw = new FileWriter(archivo, true)) {
 
-                        // Abrir el archivo para escribir
-                        try (FileWriter fw = new FileWriter(nombreArchivoNuevo + ".txt")) {
-                            // Escribir cada palabra validada junto con el identificador en el archivo
-                            for (String palabraValidada : palabrasValidadas) {
-                                fw.write(palabraValidada + ", " + identificador + "\n");
+                                        if (archivo.length() == 0) {
+                                            fw.write("CADENA---COMPONENTE LEXICO\n");
+                                        }
+
+                                        for (String palabraValidada : palabrasValidasIdentificadores) {
+                                            fw.write(palabraValidada + ", " + "identificador" + "\n");
+                                        }
+                                        // Mostrar mensaje de éxito
+                                        JOptionPane.showMessageDialog(null, "Contenido de palabras validadas guardado en el archivo existente.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+                                    }
+                                }
+
+                            } catch (IOException e) {
+                                JOptionPane.showMessageDialog(null, "Hubo un error al escribir en el archivo.", "Error", JOptionPane.ERROR_MESSAGE);
                             }
-                            // Mostrar mensaje de éxito
-                            JOptionPane.showMessageDialog(null, "Contenido de palabras validadas guardado en el nuevo archivo.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
-                        } catch (IOException e) {
-                            JOptionPane.showMessageDialog(null, "Hubo un error al escribir en el archivo.", "Error", JOptionPane.ERROR_MESSAGE);
+                        } else {
+                            try {
+                                //Si no existe lo va a crear  y escribira
+                                try (FileWriter fw = new FileWriter(archivo, true)) {
+                                    if (archivo.length() == 0) {
+                                        fw.write("CADENA---COMPONENTE LEXICO\n");
+                                    }
+                                    for (String palabraValidada : palabrasValidasIdentificadores) {
+                                        fw.write(palabraValidada + ", " + "identificador" + "\n");
+                                    }
+                                    // Mostrar mensaje de éxito
+                                    JOptionPane.showMessageDialog(null, "Contenido de palabras validadas guardado en el nuevo nuevo.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+                                }
+                            } catch (IOException e) {
+                                JOptionPane.showMessageDialog(null, "Hubo un error al crear en el archivo.", "Error", JOptionPane.ERROR_MESSAGE);
+                            }
                         }
                         break;
 
                     case 2:
+
                         // Limpiar las listas antes de comenzar la comparación
                         palabrasValidadas.clear();
                         palabrasNoValidas.clear();
@@ -183,15 +231,15 @@ public class Practica3 {
                         String expresionRegularCase2 = "(-)?[0-9]+(\\.[0-9]+)?(L|f|d)?";
 
                         int[][] tablaTransicionCase2 = {
-                                {2,1, 8, 8, 8, 8},
-                                {8,1, 3, 8, 8, 8},
-                                {8,1, 8, 8, 8, 8},
-                                {8,4, 8, 8, 8, 8},
-                                {8,4, 8, 5, 6, 7},
-                                {8,8, 8, 8, 8, 8},
-                                {8,8, 8, 8, 8, 8},
-                                {8,8, 8, 8, 8, 8},
-                                {8,8, 8, 8, 8, 8}
+                                {2, 1, 8, 8, 8, 8},
+                                {8, 1, 3, 8, 8, 8},
+                                {8, 1, 8, 8, 8, 8},
+                                {8, 4, 8, 8, 8, 8},
+                                {8, 4, 8, 5, 6, 7},
+                                {8, 8, 8, 8, 8, 8},
+                                {8, 8, 8, 8, 8, 8},
+                                {8, 8, 8, 8, 8, 8},
+                                {8, 8, 8, 8, 8, 8}
                         };
 
                         int[] estadosFinalesCase2 = {1, 4, 5, 6, 7};
@@ -226,6 +274,7 @@ public class Practica3 {
                             }
                             if (encontrado) {
                                 palabrasValidadas.add(palabra);
+                                palabrasValidasNumeros.add(palabra);
                             } else {
                                 palabrasNoValidas.add(palabra);
                             }
@@ -238,6 +287,64 @@ public class Practica3 {
                                 "\n" + palabrasValidadasStringCase2, titulo1Case2);
                         SalidaFormateada.imprimeConScroll("Palabras que NO coinciden con la ER " + expresionRegularCase2 + "\n" +
                                 "\n" + palabrasNoValidasStringCase2, titulo2Case2);
+
+
+                        if (archivo.exists()) {
+                            try (FileReader fr = new FileReader(archivo);
+                                 BufferedReader br = new BufferedReader(fr)) {
+                                // Leer el archivo línea por línea
+                                String linea;
+                                boolean contenidoExistente = false;
+                                while ((linea = br.readLine()) != null) {
+                                    // Verificar si la palabra validada ya existe en el archivo
+                                    for (String palabraValidada : palabrasValidadas) {
+                                        if (linea.contains(palabraValidada)) {
+                                            contenidoExistente = true;
+                                            break;
+                                        }
+                                    }
+                                }
+                                if (contenidoExistente) {
+                                    continue;
+                                } else {
+                                    try (FileWriter fw = new FileWriter(archivo, true)) {
+                                       // BufferedWriter bw = new BufferedWriter(fw);
+                                        if (archivo.length() == 0) {
+                                            fw.write("CADENA---COMPONENTE LEXICO\n");
+                                        }
+
+
+                                        for (String palabraValidada : palabrasValidasNumeros) {
+                                            // Identificar si es un número entero o real y concatenar apropiadamente
+                                            String tipoNumero = palabraValidada.contains(".") ? "numero real" : "numero entero";
+                                            fw.write(palabraValidada + ", " + tipoNumero + "\n");
+                                        }
+
+                                        // Mostrar mensaje de éxito
+                                        JOptionPane.showMessageDialog(null, "Contenido de palabras validadas guardado en el archivo existente.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+                                    }
+                                }
+                            } catch (IOException e) {
+                                JOptionPane.showMessageDialog(null, "Hubo un error al escribir en el archivo.", "Error", JOptionPane.ERROR_MESSAGE);
+                            }
+                        } else {
+                            try {
+                                try (FileWriter fw = new FileWriter(archivo, true)) {
+                                    if (archivo.length() == 0) {
+                                        fw.write("CADENA---COMPONENTE LEXICO\n");
+                                    }
+                                    for (String palabraValidada : palabrasValidasNumeros) {
+                                        // Identificar si es un número entero o real y concatenar apropiadamente
+                                        String tipoNumero = palabraValidada.contains(".") ? "numero real" : "numero entero";
+                                        fw.write(palabraValidada + ", " + tipoNumero + "\n");
+                                    }
+                                    // Mostrar mensaje de éxito
+                                    JOptionPane.showMessageDialog(null, "Contenido de palabras validadas guardado en el archivo nuevo.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+                                }
+                            } catch (IOException e) {
+                                JOptionPane.showMessageDialog(null, "Hubo un error al crear en el archivo.", "Error", JOptionPane.ERROR_MESSAGE);
+                            }
+                        }
 
                         break;
 
