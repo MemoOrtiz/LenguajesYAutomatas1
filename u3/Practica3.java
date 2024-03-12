@@ -350,6 +350,104 @@ public class Practica3 {
 
                     case 3:
 
+                        // Limpiar las listas antes de comenzar la comparación
+                        palabrasValidadas.clear();
+                        palabrasNoValidas.clear();
+
+                        String titulo1Case3 = "COINCIDENCIA EXITOSA";
+                        String titulo2Case3 = "COINCIDENCIA NO VALIDA";
+                        String expresionRegularCase3 = "+|-|**?|//?|%|==?|!=|>=?|<=?|and|or|not";
+
+                        int[][] tablaTransicionCase3 = {
+                                {1, 2, 4, 6, 8, 8, 9, 15, 12, 15, 13, 15},
+                                {15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15},
+                                {15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15},
+                                {15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15},
+                                {15, 15, 5, 15, 15, 15, 15, 15, 15, 15, 15, 15},
+                                {15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15},
+                                {15, 15, 15, 15, 7, 15, 15, 15, 15, 15, 15, 15},
+                                {15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15},
+                                {15, 15, 15, 15, 7, 15, 15, 15, 15, 15, 15, 15},
+                                {15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 10, 15},
+                                {15, 15, 15, 15, 15, 15, 15, 11, 15, 15, 15, 15},
+                                {15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15},
+                                {15, 15, 15, 15, 15, 15, 15, 15, 15, 11, 15, 15},
+                                {15, 15, 15, 15, 15, 15, 15, 15, 14, 15, 15, 15},
+                                {15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 11},
+                                {15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15}
+                        };
+
+                        int[] estadosFinalesCase3 = {1,2,3,4,5,6,7,11};
+
+
+                        for (String palabra : palabrasDeArchivo) {
+
+                            boolean contieneNumero = false;
+                            for (char caracter : palabra.toCharArray()) {
+                                if (Character.isDigit(caracter) || caracter == '.') {
+                                    contieneNumero = true;
+                                    break;
+                                }
+                            }
+                            if (contieneNumero) {
+                                palabrasNoValidas.add(palabra);
+                                continue; // Ignora esta palabra y pasa a la siguiente
+                            }
+                            int estadoActual = 0;
+                            for (char caracter : palabra.toCharArray()) {
+                                int columna;
+                                if (caracter == '+' || caracter == '-' || caracter == '%') {
+                                    columna = 0;
+                                } else if (caracter == '*') {
+                                    columna = 1;
+                                } else if (caracter == '/') {
+                                    columna = 2;
+                                } else if (caracter == '<' || caracter == '>') {
+                                    columna = 3;
+                                } else if (caracter == '=') {
+                                    columna = 4;
+                                } else if (caracter == '!') {
+                                    columna = 5;
+                                } else if (caracter == 'a') {
+                                    columna = 6;
+                                }else if (caracter == 'd') {
+                                    columna = 7;
+                                }else if (caracter == 'o') {
+                                    columna = 8;
+                                }else if (caracter == 'r') {
+                                    columna = 9;
+                                }else if (caracter == 'n') {
+                                    columna = 10;
+                                }else if (caracter == 't') {
+                                    columna = 11;
+                                } else {
+                                    break;
+                                }
+                                estadoActual = tablaTransicionCase3[estadoActual][columna];
+                            }
+                            boolean encontrado = false;
+                            for (int estadoFinal : estadosFinalesCase3) {
+                                if (estadoActual == estadoFinal) {
+                                    encontrado = true;
+                                    break;
+                                }
+                            }
+                            if (encontrado) {
+                                palabrasValidadas.add(palabra);
+                                operadoresValidos.add(palabra);
+                            } else {
+                                palabrasNoValidas.add(palabra);
+                            }
+                        }
+
+                        String palabrasValidadasStringCase3 = String.join("\n", palabrasValidadas);
+                        String palabrasNoValidasStringCase3 = String.join("\n", palabrasNoValidas);
+
+                        SalidaFormateada.imprimeConScroll("Palabras que SI coinciden con la ER " + expresionRegularCase3 + "\n" +
+                                "\n" + palabrasValidadasStringCase3, titulo1Case3);
+                        SalidaFormateada.imprimeConScroll("Palabras que NO coinciden con la ER " + expresionRegularCase3 + "\n" +
+                                "\n" + palabrasNoValidasStringCase3, titulo2Case3);
+
                         break;
                     case 4:
                         JOptionPane.showMessageDialog(null, "Hasta luego");

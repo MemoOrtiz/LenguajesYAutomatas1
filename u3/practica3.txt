@@ -4,7 +4,6 @@ _quepaso12_dime
 Mari_Carmen14
 /*este es un comentario /*
 12345
-<hi>
 hola1,quepaso
 -15.012
 1412.7542
@@ -18,3 +17,13 @@ $
 _hola_
 $hola$
 ____
+>
+<
+>=
+and
+or
+not
++
+-
+*
+/
