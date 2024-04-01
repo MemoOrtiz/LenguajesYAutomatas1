@@ -37,19 +37,8 @@ public class Practica4 {
             BufferedReader br = new BufferedReader(fr);
             String linea;
 
-
-            String[] palabrasLinea = new String[0];
             while ((linea = br.readLine()) != null) {  //leer el archivo por lineas
-                // Primero, busca los comentarios y los trata como una sola palabra
-                Pattern p = Pattern.compile("//[^\\n]*//");
-                Matcher m = p.matcher(linea);
-                while (m.find()) {
-                    palabrasDeArchivo.add(m.group());
-                }
-                // Luego, elimina los comentarios de la línea
-                linea = m.replaceAll("");
-                palabrasLinea = linea.split("(?<=,)|(?=,)|\\s+");
-                palabrasDeArchivo.addAll(Arrays.asList(palabrasLinea)); //Agregar las palabras al ArrayList
+               logicaLectura(linea);
             }
             br.close();//cerrar lectura de archivo
             JOptionPane.showMessageDialog(null, "Archivo leido con exito");
@@ -62,6 +51,32 @@ public class Practica4 {
         }
         return false;
     }
+    private static void logicaLectura(String linea){
+        // Divide la línea en segmentos separados por comas
+        String[] segmentos = linea.split(",");
+        for (String segmento : segmentos) {
+            // Verifica si el segmento es un comentario
+            Pattern p = Pattern.compile("//(.*?)//");
+            Matcher m = p.matcher(segmento);
+            if (m.find()) {
+                // Si el segmento es un comentario, trata todo el segmento como un comentario
+                palabrasDeArchivo.add(m.group());
+            } else {
+                // Si el segmento no tiene un comentario, divide el segmento en palabras
+                String[] palabras = segmento.split("\\s+");
+                for (String palabra : palabras) {
+                    if (!palabra.trim().isEmpty()) { // Verificar si la cadena no está vacía después de eliminar los espacios en blanco
+                        palabrasDeArchivo.add(palabra.trim()); //Agregar las palabras al ArrayList después de eliminar los espacios en blanco
+                    }
+                }
+            }
+            palabrasDeArchivo.add(","); // Agrega la coma después de procesar cada segmento
+        }
+        // Elimina la última coma que se agregó al final de la línea
+        if (!palabrasDeArchivo.isEmpty() && palabrasDeArchivo.get(palabrasDeArchivo.size() - 1).equals(",")) {
+            palabrasDeArchivo.remove(palabrasDeArchivo.size() - 1);
+        }
+    }
 
     public static void main(String[] args) {
         if (leerArchivo()) {
@@ -69,7 +84,7 @@ public class Practica4 {
             for (String palabra: palabrasDeArchivo) {
                 System.out.println(palabra);
             }
-            System.out.println("\n" + palabrasDeArchivo);
+            //System.out.println("\n" + palabrasDeArchivo);
 
         }
     }
