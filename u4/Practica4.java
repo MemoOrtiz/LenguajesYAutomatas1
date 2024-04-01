@@ -8,6 +8,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Practica4 {
     static String nombreArchivo = "./u4/practica4.txt";
@@ -38,10 +40,17 @@ public class Practica4 {
 
             String[] palabrasLinea = new String[0];
             while ((linea = br.readLine()) != null) {  //leer el archivo por lineas
-                palabrasLinea = linea.split("[,]+");
+                // Primero, busca los comentarios y los trata como una sola palabra
+                Pattern p = Pattern.compile("//[^\\n]*//");
+                Matcher m = p.matcher(linea);
+                while (m.find()) {
+                    palabrasDeArchivo.add(m.group());
+                }
+                // Luego, elimina los comentarios de la línea
+                linea = m.replaceAll("");
+                palabrasLinea = linea.split("(?<=,)|(?=,)|\\s+");
                 palabrasDeArchivo.addAll(Arrays.asList(palabrasLinea)); //Agregar las palabras al ArrayList
             }
-
             br.close();//cerrar lectura de archivo
             JOptionPane.showMessageDialog(null, "Archivo leido con exito");
             return true;
@@ -54,4 +63,14 @@ public class Practica4 {
         return false;
     }
 
+    public static void main(String[] args) {
+        if (leerArchivo()) {
+            //JOptionPane.showMessageDialog(null, "Palabras en el archivo: " + palabrasDeArchivo);
+            for (String palabra: palabrasDeArchivo) {
+                System.out.println(palabra);
+            }
+            System.out.println("\n" + palabrasDeArchivo);
+
+        }
+    }
 }
