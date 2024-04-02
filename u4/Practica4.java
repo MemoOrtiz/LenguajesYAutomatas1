@@ -54,15 +54,21 @@ public class Practica4 {
     private static void logicaLectura(String linea){
         // Divide la línea en segmentos separados por comas
         String[] segmentos = linea.split(",");
+        // Patrón para constantes de tipo String
+        Pattern pString = Pattern.compile("\"(.*?)\"");
         for (String segmento : segmentos) {
             // Verifica si el segmento es un comentario
-            Pattern p = Pattern.compile("//(.*?)//");
-            Matcher m = p.matcher(segmento);
-            if (m.find()) {
+            Pattern pComentario = Pattern.compile("//(.*?)//");
+            Matcher mComentario = pComentario.matcher(segmento);
+            Matcher mString = pString.matcher(segmento);
+            if (mComentario.find()) {
                 // Si el segmento es un comentario, trata todo el segmento como un comentario
-                palabrasDeArchivo.add(m.group());
+                palabrasDeArchivo.add(mComentario.group());
+            } else if (mString.find()) {
+                // Si el segmento es una constante de tipo String, trata todo el segmento como una constante de tipo String
+                palabrasDeArchivo.add(mString.group());
             } else {
-                // Si el segmento no tiene un comentario, divide el segmento en palabras
+                // Si el segmento no tiene un comentario ni una constante de tipo String, divide el segmento en palabras
                 String[] palabras = segmento.split("\\s+");
                 for (String palabra : palabras) {
                     if (!palabra.trim().isEmpty()) { // Verificar si la cadena no está vacía después de eliminar los espacios en blanco
@@ -85,7 +91,6 @@ public class Practica4 {
                 System.out.println(palabra);
             }
             //System.out.println("\n" + palabrasDeArchivo);
-
         }
     }
 }
