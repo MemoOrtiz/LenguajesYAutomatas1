@@ -1,4 +1,4 @@
-hola,como,estan_ si acaso 11    holadenuevo ;
-//esto es un comentario// , bien , //YO MUY BIEN//, oki
-bueno , adios
-//hola// , de nuevo 1234 hi&
+hola#,como,estan% si$ acaso& 11    holadenuevo# ;
+//esto es un comentario// , bien$ , //YO MUY BIEN//, oki%
+bueno# , adios#
+//hola// , de nuevo% , 1234 hi& , "hola mundo", "soy yo"
