@@ -94,6 +94,26 @@ public class Practica4 {
         }
     }
 
+    private static void categoriaIdentificadores(){
+        for (String palabra: palabrasDeArchivo) {
+            if (palabra.matches("[a-zA-Z]+[a-zA-Z0-9_]*[#$%&?]$")) {
+                char ultimoChar = palabra.charAt(palabra.length() - 1);
+                if(ultimoChar == '#'){
+                    System.out.println("identificadores tipo cadena de texto  " + palabra);
+                } else if (ultimoChar == '%'){
+                    System.out.println("identificadores de valor real   " + palabra);
+                } else if (ultimoChar == '&'){
+                    System.out.println("identificadores de valor entero  " + palabra);
+                } else if (ultimoChar == '$'){
+                    System.out.println("identificadores de valor logico   " + palabra);
+                } else if (ultimoChar == '?'){
+                    System.out.println("identificadores tipo programa   " + palabra);
+
+                }
+
+            }
+        }
+    }
     public static void main(String[] args) {
         if (leerArchivo()) {
             //JOptionPane.showMessageDialog(null, "Palabras en el archivo: " + palabrasDeArchivo);
