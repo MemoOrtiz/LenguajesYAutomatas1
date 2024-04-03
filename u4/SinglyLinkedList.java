@@ -1,6 +1,10 @@
 package u4;
+import java.util.Iterator;
+import java.util.NoSuchElementException;
+import java.util.function.Consumer;
 
-public class SinglyLinkedList<E> {
+public class SinglyLinkedList<E> implements Iterable<E> {
+
     private static class Node<E>{
         private E element;
         private Node<E> next;
@@ -87,5 +91,26 @@ public class SinglyLinkedList<E> {
             n = n.getNext();
         }
         return s;
+    }
+    @Override
+    public Iterator<E> iterator() {
+        return new SinglyLinkedListIterator();
+    }
+
+    private class SinglyLinkedListIterator implements Iterator<E> {
+        private Node<E> current = head;
+
+        @Override
+        public boolean hasNext() {
+            return current != null;
+        }
+
+        @Override
+        public E next() {
+            if (!hasNext()) throw new NoSuchElementException();
+            E data = current.getElement();
+            current = current.getNext();
+            return data;
+        }
     }
 }
