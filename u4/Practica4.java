@@ -89,8 +89,8 @@ public class Practica4 {
         }
     }
 
-    private static void categoriaIdentificadores(){
-        for (PalabraPosicion palabraPosicion: palabrasDelArchivo) {
+    private static void categoriaIdentificadores(PalabraPosicion palabraPosicion){
+        //for (PalabraPosicion palabraPosicion: palabrasDelArchivo) {
             String palabra = palabraPosicion.getPalabra();
             if (palabra.matches("[a-zA-Z]+[a-zA-Z0-9_]*[#$%&?]$")) {
                 char ultimoChar = palabra.charAt(palabra.length() - 1);
@@ -106,13 +106,19 @@ public class Practica4 {
                     System.out.println("identificadores tipo programa   " + palabra);
                 }
             }
+        //}
+    }
+
+    private static void analisisLexico(){
+        for (PalabraPosicion palabraPosicion: palabrasDelArchivo){
+            categoriaIdentificadores(palabraPosicion);
         }
     }
 
     public static void main(String[] args) {
         if (leerArchivo()) {
             System.out.println("Palabras en el archivo:\n " + palabrasDelArchivo);
-            categoriaIdentificadores();
+            analisisLexico();
         }
     }
 }
