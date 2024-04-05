@@ -90,34 +90,41 @@ public class Practica4 {
     }
 
     private static void categoriaIdentificadores(PalabraPosicion palabraPosicion){
-        //for (PalabraPosicion palabraPosicion: palabrasDelArchivo) {
             String palabra = palabraPosicion.getPalabra();
             if (palabra.matches("[a-zA-Z]+[a-zA-Z0-9_]*[#$%&?]$")) {
+                palabraPosicion.setEsIdentificador(-2);
                 char ultimoChar = palabra.charAt(palabra.length() - 1);
-                if(ultimoChar == '#'){
-                    System.out.println("identificadores tipo cadena de texto  " + palabra);
-                } else if (ultimoChar == '%'){
-                    System.out.println("identificadores de valor real   " + palabra);
-                } else if (ultimoChar == '&'){
-                    System.out.println("identificadores de valor entero  " + palabra);
-                } else if (ultimoChar == '$'){
-                    System.out.println("identificadores de valor logico   " + palabra);
-                } else if (ultimoChar == '?'){
-                    System.out.println("identificadores tipo programa   " + palabra);
+                if(ultimoChar == '#'){ //"identificadores tipo cadena de texto
+                    palabraPosicion.setValorToken(-53);
+                    System.out.println(palabraPosicion);
+                } else if (ultimoChar == '%'){ //identificadores de valor real
+                    palabraPosicion.setValorToken(-52);
+                    System.out.println(palabraPosicion);
+                } else if (ultimoChar == '&'){//identificadores de valor entero
+                    palabraPosicion.setValorToken(-51);
+                    System.out.println(palabraPosicion);
+                } else if (ultimoChar == '$'){//identificadores de valor logico
+                    palabraPosicion.setValorToken(-54);
+                    System.out.println(palabraPosicion);
+                } else if (ultimoChar == '?'){//identificadores tipo programa
+                    palabraPosicion.setValorToken(-55);
+                    System.out.println(palabraPosicion);
                 }
             }
-        //}
     }
 
     private static void analisisLexico(){
         for (PalabraPosicion palabraPosicion: palabrasDelArchivo){
             categoriaIdentificadores(palabraPosicion);
+            //categoriaPalabrasReservadas(palabraPosicion);
         }
     }
 
     public static void main(String[] args) {
         if (leerArchivo()) {
-            System.out.println("Palabras en el archivo:\n " + palabrasDelArchivo);
+            for (PalabraPosicion palabraPosicion: palabrasDelArchivo) {
+                System.out.println(palabraPosicion.getPalabra());
+            }
             analisisLexico();
         }
     }
