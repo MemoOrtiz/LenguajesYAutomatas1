@@ -112,11 +112,104 @@ public class Practica4 {
                 }
             }
     }
+    private static void categoriaPalabrasReservadas(PalabraPosicion palabraPosicion){
+        String palabra = palabraPosicion.getPalabra();
+        switch (palabra) {
+            case "program":
+                palabraPosicion.setEsIdentificador(-1);
+                palabraPosicion.setValorToken(-1);
+                System.out.println(palabraPosicion);
+                break;
+            case "begin":
+                palabraPosicion.setEsIdentificador(-1);
+                palabraPosicion.setValorToken(-2);
+                System.out.println(palabraPosicion);
+                break;
+            case "end":
+                palabraPosicion.setEsIdentificador(-1);
+                palabraPosicion.setValorToken(-3);
+                System.out.println(palabraPosicion);
+                break;
+            case "read":
+                palabraPosicion.setEsIdentificador(-1);
+                palabraPosicion.setValorToken(-4);
+                System.out.println(palabraPosicion);
+                break;
+            case "write":
+                palabraPosicion.setEsIdentificador(-1);
+                palabraPosicion.setValorToken(-5);
+                System.out.println(palabraPosicion);
+                break;
+            case "if":
+                palabraPosicion.setEsIdentificador(-1);
+                palabraPosicion.setValorToken(-6);
+                System.out.println(palabraPosicion);
+                break;
+            case "else":
+                palabraPosicion.setEsIdentificador(-1);
+                palabraPosicion.setValorToken(-7);
+                System.out.println(palabraPosicion);
+                break;
+            case "while":
+                palabraPosicion.setEsIdentificador(-1);
+                palabraPosicion.setValorToken(-8);
+                System.out.println(palabraPosicion);
+                break;
+            case "repeat":
+                palabraPosicion.setEsIdentificador(-1);
+                palabraPosicion.setValorToken(-9);
+                System.out.println(palabraPosicion);
+                break;
+            case "until":
+                palabraPosicion.setEsIdentificador(-1);
+                palabraPosicion.setValorToken(-10);
+                System.out.println(palabraPosicion);
+                break;
+            case "int":
+                palabraPosicion.setEsIdentificador(-1);
+                palabraPosicion.setValorToken(-11);
+                System.out.println(palabraPosicion);
+                break;
+            case "real":
+                palabraPosicion.setEsIdentificador(-1);
+                palabraPosicion.setValorToken(-12);
+                System.out.println(palabraPosicion);
+                break;
+            case "string":
+                palabraPosicion.setEsIdentificador(-1);
+                palabraPosicion.setValorToken(-13);
+                System.out.println(palabraPosicion);
+                break;
+            case "bool":
+                palabraPosicion.setEsIdentificador(-1);
+                palabraPosicion.setValorToken(-14);
+                System.out.println(palabraPosicion);
+                break;
+            case "var":
+                palabraPosicion.setEsIdentificador(-1);
+                palabraPosicion.setValorToken(-15);
+                System.out.println(palabraPosicion);
+                break;
+            case "then":
+                palabraPosicion.setEsIdentificador(-1);
+                palabraPosicion.setValorToken(-16);
+                System.out.println(palabraPosicion);
+                break;
+            case "do":
+                palabraPosicion.setEsIdentificador(-1);
+                palabraPosicion.setValorToken(-17);
+                System.out.println(palabraPosicion);
+                break;
+            default:
+                // No es una palabra reservada
+                break;
+        }
+    }
 
     private static void analisisLexico(){
         for (PalabraPosicion palabraPosicion: palabrasDelArchivo){
             categoriaIdentificadores(palabraPosicion);
-            //categoriaPalabrasReservadas(palabraPosicion);
+            categoriaPalabrasReservadas(palabraPosicion);
         }
     }
 
