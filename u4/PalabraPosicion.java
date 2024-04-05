@@ -30,10 +30,10 @@ public class PalabraPosicion {
 
     @Override
     public String toString() {
-        return(palabra != null && !palabra.isEmpty() ? "palabra= " + palabra : "") +
-                (posicion != 0 ? " posicion= " + posicion : "") +
-                (valorToken != 0 ? " valorToken= " + valorToken : "") +
-                (esIdentificador != 0 ? " esIdentificador= " + esIdentificador : "");
+        return(palabra != null && !palabra.isEmpty() ? palabra : "") + ","+
+                (valorToken != 0 ? + valorToken : "") +","+
+                (esIdentificador != 0 ? + esIdentificador : "")+","+
+                (posicion != 0 ? + posicion : "");
     }
 
 }
