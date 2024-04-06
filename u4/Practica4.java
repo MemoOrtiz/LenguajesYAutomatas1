@@ -1,10 +1,7 @@
 package u4;
 
 import javax.swing.*;
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -107,7 +104,7 @@ public class Practica4 {
                     palabraPosicion.setValorToken(-55);
                     System.out.println(palabraPosicion);
                 }
-            }
+            }//no es identificador
     }
     private static void categoriaPalabrasReservadas(PalabraPosicion palabraPosicion){
         String palabra = palabraPosicion.getPalabra();
@@ -241,7 +238,19 @@ public class Practica4 {
             categoriaCaracteresEspeciales(palabraPosicion);
         }
     }
-    
+
+    public static void escribirArchivo() {
+        try {
+            BufferedWriter writer = new BufferedWriter(new FileWriter("u4/resultadoAnalisisLexico.txt"));
+            for (PalabraPosicion palabraPosicion : palabrasDelArchivo) {
+                writer.write(palabraPosicion.toString());
+                writer.newLine();
+            }
+            writer.close();
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(null, "Conflicto para escribir el archivo");
+        }
+    }
 
     public static void main(String[] args) {
         if (leerArchivo()) {
@@ -249,6 +258,7 @@ public class Practica4 {
                 System.out.println(palabraPosicion.getPalabra());
             }
             analisisLexico();
+            escribirArchivo();
         }
     }
 }
