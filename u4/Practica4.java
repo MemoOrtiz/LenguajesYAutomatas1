@@ -5,9 +5,6 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -206,12 +203,45 @@ public class Practica4 {
         }
     }
 
+    private static void categoriaCaracteresEspeciales(PalabraPosicion palabraPosicion){
+        String palabra = palabraPosicion.getPalabra();
+        if(palabra.matches("[(),;:]")){
+            palabraPosicion.setEsIdentificador(-1);
+            switch (palabra){
+                case "(":
+                    palabraPosicion.setValorToken(-73);
+                    System.out.println(palabraPosicion);
+                    break;
+                case ")":
+                    palabraPosicion.setValorToken(-74);
+                    System.out.println(palabraPosicion);
+                    break;
+                case ",":
+                    palabraPosicion.setValorToken(-76);
+                    System.out.println(palabraPosicion);
+                    break;
+                case ";":
+                    palabraPosicion.setValorToken(-75);
+                    System.out.println(palabraPosicion);
+                    break;
+                case ":":
+                    palabraPosicion.setValorToken(-77); //Se añadio el -77 para el caracter especial : no estaba en la tabla de tokens
+                    System.out.println(palabraPosicion);
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
+
     private static void analisisLexico(){
         for (PalabraPosicion palabraPosicion: palabrasDelArchivo){
             categoriaIdentificadores(palabraPosicion);
             categoriaPalabrasReservadas(palabraPosicion);
+            categoriaCaracteresEspeciales(palabraPosicion);
         }
     }
+    
 
     public static void main(String[] args) {
         if (leerArchivo()) {
