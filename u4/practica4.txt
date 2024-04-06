@@ -1,4 +1,5 @@
-hola#,como,estan% si$ acaso& 11    holadenuevo# ;
+hola#,como#,estan% si$ acaso& 11    holadenuevo# ; , while
 //esto es un comentario// , bien$ , //YO MUY BIEN//, oki%
 bueno# , adios#
 //hola// , de nuevo% , 1234 hi& , "hola mundo", "soy yo"
+begin, int
