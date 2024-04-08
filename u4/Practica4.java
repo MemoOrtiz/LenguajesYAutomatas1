@@ -230,12 +230,60 @@ public class Practica4 {
             }
         }
     }
+    private static void categoriaNumerosEnteros(PalabraPosicion palabraPosicion){
+        String palabra = palabraPosicion.getPalabra();
+        if (palabra.matches("\\d+")) {
+            palabraPosicion.setEsIdentificador(-1);
+            palabraPosicion.setValorToken(-61);
+            System.out.println(palabraPosicion);
+        }//no es numero entero
+    }
+
+    private static void categoriaNumerosDecimales(PalabraPosicion palabraPosicion){
+        String palabra = palabraPosicion.getPalabra();
+        if (palabra.matches("(-)?\\d+(\\.)\\d+")) {
+            palabraPosicion.setEsIdentificador(-1);
+            palabraPosicion.setValorToken(-62);
+            System.out.println(palabraPosicion);
+        }//no es numero decimal
+    }
+
+    private static void categoriaConstanteString(PalabraPosicion palabraPosicion){
+        String palabra = palabraPosicion.getPalabra();
+        if (palabra.matches("\"(.+?)\"")) {
+            palabraPosicion.setEsIdentificador(-1);
+            palabraPosicion.setValorToken(-63);
+            System.out.println(palabraPosicion);
+        }//no es constante string
+    }
+    private static void categoriaValorLogico(PalabraPosicion palabraPosicion){
+        String palabra = palabraPosicion.getPalabra();
+        switch (palabra) {
+            case "true":
+                palabraPosicion.setEsIdentificador(-1);
+                palabraPosicion.setValorToken(-64);
+                System.out.println(palabraPosicion);
+                break;
+            case "false":
+                palabraPosicion.setEsIdentificador(-1);
+                palabraPosicion.setValorToken(-65);
+                System.out.println(palabraPosicion);
+                break;
+            default:
+                // No es un valor logico
+                break;
+        }
+    }
 
     private static void analisisLexico(){
         for (PalabraPosicion palabraPosicion: palabrasDelArchivo){
             categoriaIdentificadores(palabraPosicion);
             categoriaPalabrasReservadas(palabraPosicion);
             categoriaCaracteresEspeciales(palabraPosicion);
+            categoriaNumerosEnteros(palabraPosicion);
+            categoriaNumerosDecimales(palabraPosicion);
+            categoriaConstanteString(palabraPosicion);
+            categoriaValorLogico(palabraPosicion);
         }
     }
 
