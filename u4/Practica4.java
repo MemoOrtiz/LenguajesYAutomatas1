@@ -7,7 +7,7 @@ import java.util.regex.Pattern;
 
 public class Practica4 {
     static String nombreArchivo = "./u4/practica4.txt";
-   static SinglyLinkedList <PalabraPosicion> palabrasDelArchivo = new SinglyLinkedList<>();
+   static SinglyLinkedList <DatosPalabra> palabrasDelArchivo = new SinglyLinkedList<>();
 
     private static boolean archivoLecturaTieneContenido() {
         try {
@@ -62,20 +62,20 @@ public class Practica4 {
             Matcher mString = pString.matcher(segmento);
             if (mComentario.find()) {
                 // Si el segmento es un comentario, trata todo el segmento como un comentario
-                palabrasDelArchivo.addLast(new PalabraPosicion(mComentario.group(),numLinea));
+                palabrasDelArchivo.addLast(new DatosPalabra(mComentario.group(),numLinea));
             } else if (mString.find()) {
                 // Si el segmento es una constante de tipo String, trata todo el segmento como una constante de tipo String
-                palabrasDelArchivo.addLast(new PalabraPosicion(mString.group(),numLinea));
+                palabrasDelArchivo.addLast(new DatosPalabra(mString.group(),numLinea));
             } else {
                 // Si el segmento no tiene un comentario ni una constante String, divide el segmento en palabras
                 String[] palabras = segmento.split("\\s+");
                 for (String palabra : palabras) {
                     if (!palabra.trim().isEmpty()) { // Verifica si la cadena no está vacia después de eliminar los espacios en blanco
-                        palabrasDelArchivo.addLast(new PalabraPosicion(palabra.trim(),numLinea)); //Agrega las palabras a la lista despues de eliminar los espacios en blanco
+                        palabrasDelArchivo.addLast(new DatosPalabra(palabra.trim(),numLinea)); //Agrega las palabras a la lista despues de eliminar los espacios en blanco
                     }
                 }
             }
-            palabrasDelArchivo.addLast(new PalabraPosicion(",",numLinea)); // Agrega la coma después de procesar cada segmento
+            palabrasDelArchivo.addLast(new DatosPalabra(",",numLinea)); // Agrega la coma después de procesar cada segmento
         }
         // Elimina la última coma que se agregó al final de la línea
         if (!palabrasDelArchivo.isEmpty() && palabrasDelArchivo.last().getPalabra().equals(",")) {
@@ -83,116 +83,116 @@ public class Practica4 {
         }
     }
 
-    private static void categoriaIdentificadores(PalabraPosicion palabraPosicion){
-            String palabra = palabraPosicion.getPalabra();
+    private static void categoriaIdentificadores(DatosPalabra datosPalabra){
+            String palabra = datosPalabra.getPalabra();
             if (palabra.matches("[a-zA-Z]+[a-zA-Z0-9_]*[#$%&?]$")) {
-                palabraPosicion.setEsIdentificador(-2);
+                datosPalabra.setEsIdentificador(-2);
                 char ultimoChar = palabra.charAt(palabra.length() - 1);
                 if(ultimoChar == '#'){ //"identificadores tipo cadena de texto
-                    palabraPosicion.setValorToken(-53);
-                    System.out.println(palabraPosicion);
+                    datosPalabra.setValorToken(-53);
+                    System.out.println(datosPalabra);
                 } else if (ultimoChar == '%'){ //identificadores de valor real
-                    palabraPosicion.setValorToken(-52);
-                    System.out.println(palabraPosicion);
+                    datosPalabra.setValorToken(-52);
+                    System.out.println(datosPalabra);
                 } else if (ultimoChar == '&'){//identificadores de valor entero
-                    palabraPosicion.setValorToken(-51);
-                    System.out.println(palabraPosicion);
+                    datosPalabra.setValorToken(-51);
+                    System.out.println(datosPalabra);
                 } else if (ultimoChar == '$'){//identificadores de valor logico
-                    palabraPosicion.setValorToken(-54);
-                    System.out.println(palabraPosicion);
+                    datosPalabra.setValorToken(-54);
+                    System.out.println(datosPalabra);
                 } else if (ultimoChar == '?'){//identificadores tipo programa
-                    palabraPosicion.setValorToken(-55);
-                    System.out.println(palabraPosicion);
+                    datosPalabra.setValorToken(-55);
+                    System.out.println(datosPalabra);
                 }
             }//no es identificador
     }
-    private static void categoriaPalabrasReservadas(PalabraPosicion palabraPosicion){
-        String palabra = palabraPosicion.getPalabra();
+    private static void categoriaPalabrasReservadas(DatosPalabra datosPalabra){
+        String palabra = datosPalabra.getPalabra();
         switch (palabra) {
             case "program":
-                palabraPosicion.setEsIdentificador(-1);
-                palabraPosicion.setValorToken(-1);
-                System.out.println(palabraPosicion);
+                datosPalabra.setEsIdentificador(-1);
+                datosPalabra.setValorToken(-1);
+                System.out.println(datosPalabra);
                 break;
             case "begin":
-                palabraPosicion.setEsIdentificador(-1);
-                palabraPosicion.setValorToken(-2);
-                System.out.println(palabraPosicion);
+                datosPalabra.setEsIdentificador(-1);
+                datosPalabra.setValorToken(-2);
+                System.out.println(datosPalabra);
                 break;
             case "end":
-                palabraPosicion.setEsIdentificador(-1);
-                palabraPosicion.setValorToken(-3);
-                System.out.println(palabraPosicion);
+                datosPalabra.setEsIdentificador(-1);
+                datosPalabra.setValorToken(-3);
+                System.out.println(datosPalabra);
                 break;
             case "read":
-                palabraPosicion.setEsIdentificador(-1);
-                palabraPosicion.setValorToken(-4);
-                System.out.println(palabraPosicion);
+                datosPalabra.setEsIdentificador(-1);
+                datosPalabra.setValorToken(-4);
+                System.out.println(datosPalabra);
                 break;
             case "write":
-                palabraPosicion.setEsIdentificador(-1);
-                palabraPosicion.setValorToken(-5);
-                System.out.println(palabraPosicion);
+                datosPalabra.setEsIdentificador(-1);
+                datosPalabra.setValorToken(-5);
+                System.out.println(datosPalabra);
                 break;
             case "if":
-                palabraPosicion.setEsIdentificador(-1);
-                palabraPosicion.setValorToken(-6);
-                System.out.println(palabraPosicion);
+                datosPalabra.setEsIdentificador(-1);
+                datosPalabra.setValorToken(-6);
+                System.out.println(datosPalabra);
                 break;
             case "else":
-                palabraPosicion.setEsIdentificador(-1);
-                palabraPosicion.setValorToken(-7);
-                System.out.println(palabraPosicion);
+                datosPalabra.setEsIdentificador(-1);
+                datosPalabra.setValorToken(-7);
+                System.out.println(datosPalabra);
                 break;
             case "while":
-                palabraPosicion.setEsIdentificador(-1);
-                palabraPosicion.setValorToken(-8);
-                System.out.println(palabraPosicion);
+                datosPalabra.setEsIdentificador(-1);
+                datosPalabra.setValorToken(-8);
+                System.out.println(datosPalabra);
                 break;
             case "repeat":
-                palabraPosicion.setEsIdentificador(-1);
-                palabraPosicion.setValorToken(-9);
-                System.out.println(palabraPosicion);
+                datosPalabra.setEsIdentificador(-1);
+                datosPalabra.setValorToken(-9);
+                System.out.println(datosPalabra);
                 break;
             case "until":
-                palabraPosicion.setEsIdentificador(-1);
-                palabraPosicion.setValorToken(-10);
-                System.out.println(palabraPosicion);
+                datosPalabra.setEsIdentificador(-1);
+                datosPalabra.setValorToken(-10);
+                System.out.println(datosPalabra);
                 break;
             case "int":
-                palabraPosicion.setEsIdentificador(-1);
-                palabraPosicion.setValorToken(-11);
-                System.out.println(palabraPosicion);
+                datosPalabra.setEsIdentificador(-1);
+                datosPalabra.setValorToken(-11);
+                System.out.println(datosPalabra);
                 break;
             case "real":
-                palabraPosicion.setEsIdentificador(-1);
-                palabraPosicion.setValorToken(-12);
-                System.out.println(palabraPosicion);
+                datosPalabra.setEsIdentificador(-1);
+                datosPalabra.setValorToken(-12);
+                System.out.println(datosPalabra);
                 break;
             case "string":
-                palabraPosicion.setEsIdentificador(-1);
-                palabraPosicion.setValorToken(-13);
-                System.out.println(palabraPosicion);
+                datosPalabra.setEsIdentificador(-1);
+                datosPalabra.setValorToken(-13);
+                System.out.println(datosPalabra);
                 break;
             case "bool":
-                palabraPosicion.setEsIdentificador(-1);
-                palabraPosicion.setValorToken(-14);
-                System.out.println(palabraPosicion);
+                datosPalabra.setEsIdentificador(-1);
+                datosPalabra.setValorToken(-14);
+                System.out.println(datosPalabra);
                 break;
             case "var":
-                palabraPosicion.setEsIdentificador(-1);
-                palabraPosicion.setValorToken(-15);
-                System.out.println(palabraPosicion);
+                datosPalabra.setEsIdentificador(-1);
+                datosPalabra.setValorToken(-15);
+                System.out.println(datosPalabra);
                 break;
             case "then":
-                palabraPosicion.setEsIdentificador(-1);
-                palabraPosicion.setValorToken(-16);
-                System.out.println(palabraPosicion);
+                datosPalabra.setEsIdentificador(-1);
+                datosPalabra.setValorToken(-16);
+                System.out.println(datosPalabra);
                 break;
             case "do":
-                palabraPosicion.setEsIdentificador(-1);
-                palabraPosicion.setValorToken(-17);
-                System.out.println(palabraPosicion);
+                datosPalabra.setEsIdentificador(-1);
+                datosPalabra.setValorToken(-17);
+                System.out.println(datosPalabra);
                 break;
             default:
                 // No es una palabra reservada
@@ -200,74 +200,74 @@ public class Practica4 {
         }
     }
 
-    private static void categoriaCaracteresEspeciales(PalabraPosicion palabraPosicion){
-        String palabra = palabraPosicion.getPalabra();
+    private static void categoriaCaracteresEspeciales(DatosPalabra datosPalabra){
+        String palabra = datosPalabra.getPalabra();
         if(palabra.matches("[(),;:]")){
-            palabraPosicion.setEsIdentificador(-1);
+            datosPalabra.setEsIdentificador(-1);
             switch (palabra){
                 case "(":
-                    palabraPosicion.setValorToken(-73);
-                    System.out.println(palabraPosicion);
+                    datosPalabra.setValorToken(-73);
+                    System.out.println(datosPalabra);
                     break;
                 case ")":
-                    palabraPosicion.setValorToken(-74);
-                    System.out.println(palabraPosicion);
+                    datosPalabra.setValorToken(-74);
+                    System.out.println(datosPalabra);
                     break;
                 case ",":
-                    palabraPosicion.setValorToken(-76);
-                    System.out.println(palabraPosicion);
+                    datosPalabra.setValorToken(-76);
+                    System.out.println(datosPalabra);
                     break;
                 case ";":
-                    palabraPosicion.setValorToken(-75);
-                    System.out.println(palabraPosicion);
+                    datosPalabra.setValorToken(-75);
+                    System.out.println(datosPalabra);
                     break;
                 case ":":
-                    palabraPosicion.setValorToken(-77); //Se añadio el -77 para el caracter especial : no estaba en la tabla de tokens
-                    System.out.println(palabraPosicion);
+                    datosPalabra.setValorToken(-77); //Se añadio el -77 para el caracter especial : no estaba en la tabla de tokens
+                    System.out.println(datosPalabra);
                     break;
                 default:
                     break;
             }
         }
     }
-    private static void categoriaNumerosEnteros(PalabraPosicion palabraPosicion){
-        String palabra = palabraPosicion.getPalabra();
+    private static void categoriaNumerosEnteros(DatosPalabra datosPalabra){
+        String palabra = datosPalabra.getPalabra();
         if (palabra.matches("\\d+")) {
-            palabraPosicion.setEsIdentificador(-1);
-            palabraPosicion.setValorToken(-61);
-            System.out.println(palabraPosicion);
+            datosPalabra.setEsIdentificador(-1);
+            datosPalabra.setValorToken(-61);
+            System.out.println(datosPalabra);
         }//no es numero entero
     }
 
-    private static void categoriaNumerosDecimales(PalabraPosicion palabraPosicion){
-        String palabra = palabraPosicion.getPalabra();
+    private static void categoriaNumerosDecimales(DatosPalabra datosPalabra){
+        String palabra = datosPalabra.getPalabra();
         if (palabra.matches("(-)?\\d+(\\.)\\d+")) {
-            palabraPosicion.setEsIdentificador(-1);
-            palabraPosicion.setValorToken(-62);
-            System.out.println(palabraPosicion);
+            datosPalabra.setEsIdentificador(-1);
+            datosPalabra.setValorToken(-62);
+            System.out.println(datosPalabra);
         }//no es numero decimal
     }
 
-    private static void categoriaConstanteString(PalabraPosicion palabraPosicion){
-        String palabra = palabraPosicion.getPalabra();
+    private static void categoriaConstanteString(DatosPalabra datosPalabra){
+        String palabra = datosPalabra.getPalabra();
         if (palabra.matches("\"(.+?)\"")) {
-            palabraPosicion.setEsIdentificador(-1);
-            palabraPosicion.setValorToken(-63);
-            System.out.println(palabraPosicion);
+            datosPalabra.setEsIdentificador(-1);
+            datosPalabra.setValorToken(-63);
+            System.out.println(datosPalabra);
         }//no es constante string
     }
-    private static void categoriaValorLogico(PalabraPosicion palabraPosicion){
-        String palabra = palabraPosicion.getPalabra();
+    private static void categoriaValorLogico(DatosPalabra datosPalabra){
+        String palabra = datosPalabra.getPalabra();
         switch (palabra) {
             case "true":
-                palabraPosicion.setEsIdentificador(-1);
-                palabraPosicion.setValorToken(-64);
-                System.out.println(palabraPosicion);
+                datosPalabra.setEsIdentificador(-1);
+                datosPalabra.setValorToken(-64);
+                System.out.println(datosPalabra);
                 break;
             case "false":
-                palabraPosicion.setEsIdentificador(-1);
-                palabraPosicion.setValorToken(-65);
-                System.out.println(palabraPosicion);
+                datosPalabra.setEsIdentificador(-1);
+                datosPalabra.setValorToken(-65);
+                System.out.println(datosPalabra);
                 break;
             default:
                 // No es un valor logico
@@ -276,22 +276,22 @@ public class Practica4 {
     }
 
     private static void analisisLexico(){
-        for (PalabraPosicion palabraPosicion: palabrasDelArchivo){
-            categoriaIdentificadores(palabraPosicion);
-            categoriaPalabrasReservadas(palabraPosicion);
-            categoriaCaracteresEspeciales(palabraPosicion);
-            categoriaNumerosEnteros(palabraPosicion);
-            categoriaNumerosDecimales(palabraPosicion);
-            categoriaConstanteString(palabraPosicion);
-            categoriaValorLogico(palabraPosicion);
+        for (DatosPalabra datosPalabra : palabrasDelArchivo){
+            categoriaIdentificadores(datosPalabra);
+            categoriaPalabrasReservadas(datosPalabra);
+            categoriaCaracteresEspeciales(datosPalabra);
+            categoriaNumerosEnteros(datosPalabra);
+            categoriaNumerosDecimales(datosPalabra);
+            categoriaConstanteString(datosPalabra);
+            categoriaValorLogico(datosPalabra);
         }
     }
 
     public static void escribirArchivo() {
         try {
             BufferedWriter writer = new BufferedWriter(new FileWriter("u4/resultadoAnalisisLexico.txt"));
-            for (PalabraPosicion palabraPosicion : palabrasDelArchivo) {
-                writer.write(palabraPosicion.toString());
+            for (DatosPalabra datosPalabra : palabrasDelArchivo) {
+                writer.write(datosPalabra.toString());
                 writer.newLine();
             }
             writer.close();
@@ -302,8 +302,8 @@ public class Practica4 {
 
     public static void main(String[] args) {
         if (leerArchivo()) {
-            for (PalabraPosicion palabraPosicion: palabrasDelArchivo) {
-                System.out.println(palabraPosicion.getPalabra());
+            for (DatosPalabra datosPalabra : palabrasDelArchivo) {
+                System.out.println(datosPalabra.getPalabra());
             }
             analisisLexico();
             escribirArchivo();

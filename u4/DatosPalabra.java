@@ -1,12 +1,12 @@
 package u4;
 
-public class PalabraPosicion {
+public class DatosPalabra {
     private String palabra;
     private int valorToken;
     private int esIdentificador;
     private int posicion;
 
-    public PalabraPosicion(String palabra, int posicion) {
+    public DatosPalabra(String palabra, int posicion) {
         this.palabra = palabra;
         this.posicion = posicion;
     }
@@ -19,9 +19,7 @@ public class PalabraPosicion {
         return posicion;
     }
 
-    public void setPalabra(String palabra) {
-        this.palabra = palabra;
-    }
+
     public void setValorToken(int valorToken) { this.valorToken = valorToken; }
     public void setEsIdentificador(int esIdentificador) { this.esIdentificador = esIdentificador; }
     public void setPosicion(int posicion) {
