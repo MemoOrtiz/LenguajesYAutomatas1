@@ -7,7 +7,7 @@ import java.util.regex.Pattern;
 
 public class Practica4 {
     static String nombreArchivo = "./u4/practica4.txt";
-   static SinglyLinkedList <DatosPalabra> palabrasDelArchivo = new SinglyLinkedList<>();
+    static SinglyLinkedList<DatosPalabra> palabrasDelArchivo = new SinglyLinkedList<>();
 
     private static boolean archivoLecturaTieneContenido() {
         try {
@@ -35,7 +35,7 @@ public class Practica4 {
             int numLinea = 0;
             while ((linea = br.readLine()) != null) {  //leer el archivo por lineas
                 numLinea++;
-               logicaLectura(linea,numLinea);
+                logicaLectura(linea, numLinea);
             }
             br.close();//cerrar lectura de archivo
             JOptionPane.showMessageDialog(null, "Archivo leido con exito");
@@ -48,8 +48,9 @@ public class Practica4 {
         }
         return false;
     }
+
     // Método que procesa la línea leída del archivo
-    private static void logicaLectura(String linea,int numLinea){
+    private static void logicaLectura(String linea, int numLinea) {
         // Divide la línea en segmentos separados por comas
         String[] segmentos = linea.split(",");
         // Patrón para constantes de tipo String
@@ -62,20 +63,20 @@ public class Practica4 {
             Matcher mString = pString.matcher(segmento);
             if (mComentario.find()) {
                 // Si el segmento es un comentario, trata todo el segmento como un comentario
-                palabrasDelArchivo.addLast(new DatosPalabra(mComentario.group(),numLinea));
+                palabrasDelArchivo.addLast(new DatosPalabra(mComentario.group(), numLinea));
             } else if (mString.find()) {
                 // Si el segmento es una constante de tipo String, trata todo el segmento como una constante de tipo String
-                palabrasDelArchivo.addLast(new DatosPalabra(mString.group(),numLinea));
+                palabrasDelArchivo.addLast(new DatosPalabra(mString.group(), numLinea));
             } else {
                 // Si el segmento no tiene un comentario ni una constante String, divide el segmento en palabras
                 String[] palabras = segmento.split("\\s+");
                 for (String palabra : palabras) {
                     if (!palabra.trim().isEmpty()) { // Verifica si la cadena no está vacia después de eliminar los espacios en blanco
-                        palabrasDelArchivo.addLast(new DatosPalabra(palabra.trim(),numLinea)); //Agrega las palabras a la lista despues de eliminar los espacios en blanco
+                        palabrasDelArchivo.addLast(new DatosPalabra(palabra.trim(), numLinea)); //Agrega las palabras a la lista despues de eliminar los espacios en blanco
                     }
                 }
             }
-            palabrasDelArchivo.addLast(new DatosPalabra(",",numLinea)); // Agrega la coma después de procesar cada segmento
+            palabrasDelArchivo.addLast(new DatosPalabra(",", numLinea)); // Agrega la coma después de procesar cada segmento
         }
         // Elimina la última coma que se agregó al final de la línea
         if (!palabrasDelArchivo.isEmpty() && palabrasDelArchivo.last().getPalabra().equals(",")) {
@@ -83,30 +84,31 @@ public class Practica4 {
         }
     }
 
-    private static void categoriaIdentificadores(DatosPalabra datosPalabra){
-            String palabra = datosPalabra.getPalabra();
-            if (palabra.matches("[a-zA-Z]+[a-zA-Z0-9_]*[#$%&?]$")) {
-                datosPalabra.setEsIdentificador(-2);
-                char ultimoChar = palabra.charAt(palabra.length() - 1);
-                if(ultimoChar == '#'){ //"identificadores tipo cadena de texto
-                    datosPalabra.setValorToken(-53);
-                    System.out.println(datosPalabra);
-                } else if (ultimoChar == '%'){ //identificadores de valor real
-                    datosPalabra.setValorToken(-52);
-                    System.out.println(datosPalabra);
-                } else if (ultimoChar == '&'){//identificadores de valor entero
-                    datosPalabra.setValorToken(-51);
-                    System.out.println(datosPalabra);
-                } else if (ultimoChar == '$'){//identificadores de valor logico
-                    datosPalabra.setValorToken(-54);
-                    System.out.println(datosPalabra);
-                } else if (ultimoChar == '?'){//identificadores tipo programa
-                    datosPalabra.setValorToken(-55);
-                    System.out.println(datosPalabra);
-                }
-            }//no es identificador
+    private static void categoriaIdentificadores(DatosPalabra datosPalabra) {
+        String palabra = datosPalabra.getPalabra();
+        if (palabra.matches("[a-zA-Z]+[a-zA-Z0-9_]*[#$%&?]$")) {
+            datosPalabra.setEsIdentificador(-2);
+            char ultimoChar = palabra.charAt(palabra.length() - 1);
+            if (ultimoChar == '#') { //"identificadores tipo cadena de texto
+                datosPalabra.setValorToken(-53);
+                System.out.println(datosPalabra);
+            } else if (ultimoChar == '%') { //identificadores de valor real
+                datosPalabra.setValorToken(-52);
+                System.out.println(datosPalabra);
+            } else if (ultimoChar == '&') {//identificadores de valor entero
+                datosPalabra.setValorToken(-51);
+                System.out.println(datosPalabra);
+            } else if (ultimoChar == '$') {//identificadores de valor logico
+                datosPalabra.setValorToken(-54);
+                System.out.println(datosPalabra);
+            } else if (ultimoChar == '?') {//identificadores tipo programa
+                datosPalabra.setValorToken(-55);
+                System.out.println(datosPalabra);
+            }
+        }//no es identificador
     }
-    private static void categoriaPalabrasReservadas(DatosPalabra datosPalabra){
+
+    private static void categoriaPalabrasReservadas(DatosPalabra datosPalabra) {
         String palabra = datosPalabra.getPalabra();
         switch (palabra) {
             case "program":
@@ -200,11 +202,11 @@ public class Practica4 {
         }
     }
 
-    private static void categoriaCaracteresEspeciales(DatosPalabra datosPalabra){
+    private static void categoriaCaracteresEspeciales(DatosPalabra datosPalabra) {
         String palabra = datosPalabra.getPalabra();
-        if(palabra.matches("[(),;:]")){
+        if (palabra.matches("[(),;:]")) {
             datosPalabra.setEsIdentificador(-1);
-            switch (palabra){
+            switch (palabra) {
                 case "(":
                     datosPalabra.setValorToken(-73);
                     System.out.println(datosPalabra);
@@ -230,7 +232,8 @@ public class Practica4 {
             }
         }
     }
-    private static void categoriaNumerosEnteros(DatosPalabra datosPalabra){
+
+    private static void categoriaNumerosEnteros(DatosPalabra datosPalabra) {
         String palabra = datosPalabra.getPalabra();
         if (palabra.matches("\\d+")) {
             datosPalabra.setEsIdentificador(-1);
@@ -239,7 +242,7 @@ public class Practica4 {
         }//no es numero entero
     }
 
-    private static void categoriaNumerosDecimales(DatosPalabra datosPalabra){
+    private static void categoriaNumerosDecimales(DatosPalabra datosPalabra) {
         String palabra = datosPalabra.getPalabra();
         if (palabra.matches("(-)?\\d+(\\.)\\d+")) {
             datosPalabra.setEsIdentificador(-1);
@@ -248,7 +251,7 @@ public class Practica4 {
         }//no es numero decimal
     }
 
-    private static void categoriaConstanteString(DatosPalabra datosPalabra){
+    private static void categoriaConstanteString(DatosPalabra datosPalabra) {
         String palabra = datosPalabra.getPalabra();
         if (palabra.matches("\"(.+?)\"")) {
             datosPalabra.setEsIdentificador(-1);
@@ -256,7 +259,8 @@ public class Practica4 {
             System.out.println(datosPalabra);
         }//no es constante string
     }
-    private static void categoriaValorLogico(DatosPalabra datosPalabra){
+
+    private static void categoriaValorLogico(DatosPalabra datosPalabra) {
         String palabra = datosPalabra.getPalabra();
         switch (palabra) {
             case "true":
@@ -275,8 +279,105 @@ public class Practica4 {
         }
     }
 
-    private static void analisisLexico(){
-        for (DatosPalabra datosPalabra : palabrasDelArchivo){
+    private static void categoriaOperadoresMatematicos(DatosPalabra datosPalabra) {
+        String palabra = datosPalabra.getPalabra();
+        if (palabra.matches("\\+|-|\\*|/|:=")) {
+            datosPalabra.setEsIdentificador(-1);
+            switch (palabra) {
+                case "+":
+                    datosPalabra.setValorToken(-24);
+                    System.out.println(datosPalabra);
+                    break;
+                case "-":
+                    datosPalabra.setValorToken(-25);
+                    System.out.println(datosPalabra);
+                    break;
+                case "*":
+                    datosPalabra.setValorToken(-21);
+                    System.out.println(datosPalabra);
+                    break;
+                case "/":
+                    datosPalabra.setValorToken(-22);
+                    System.out.println(datosPalabra);
+                    break;
+                case ":=":
+                    datosPalabra.setValorToken(-26);
+                    System.out.println(datosPalabra);
+                default:
+                    break;
+            }
+        }
+    }
+
+    private static void categoriaOperadoresRelacionales(DatosPalabra datosPalabra) {
+        String palabra = datosPalabra.getPalabra();
+        if (palabra.matches("<|>|<=|>=|==|!=")) {
+            datosPalabra.setEsIdentificador(-1);
+            switch (palabra) {
+                case "<":
+                    datosPalabra.setValorToken(-31);
+                    System.out.println(datosPalabra);
+                    break;
+                case "<=":
+                    datosPalabra.setValorToken(-32);
+                    System.out.println(datosPalabra);
+                    break;
+                case ">":
+                    datosPalabra.setValorToken(-33);
+                    System.out.println(datosPalabra);
+                    break;
+                case ">=":
+                    datosPalabra.setValorToken(-34);
+                    System.out.println(datosPalabra);
+                    break;
+                case "==":
+                    datosPalabra.setValorToken(-35);
+                    System.out.println(datosPalabra);
+                    break;
+                case "!=":
+                    datosPalabra.setValorToken(-36);
+                    System.out.println(datosPalabra);
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
+
+    private static void categoriaOperadoresLogicos(DatosPalabra datosPalabra){
+        String palabra = datosPalabra.getPalabra();
+        if (palabra.matches("&&|\\|\\|!")) {
+            datosPalabra.setEsIdentificador(-1);
+            switch (palabra) {
+                case "&&":
+                    datosPalabra.setValorToken(-41);
+                    System.out.println(datosPalabra);
+                    break;
+                case "||":
+                    datosPalabra.setValorToken(-42);
+                    System.out.println(datosPalabra);
+                    break;
+                case "!":
+                    datosPalabra.setValorToken(-43);
+                    System.out.println(datosPalabra);
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
+
+    private static void categoriaComentarios(DatosPalabra datosPalabra){
+        String palabra = datosPalabra.getPalabra();
+        if (palabra.matches("//(.*?)//")) {
+            datosPalabra.setEsIdentificador(-1);
+            datosPalabra.setValorToken(-71);
+            System.out.println(datosPalabra);
+        }
+    }
+
+    private static void analisisLexico() {
+        for (DatosPalabra datosPalabra : palabrasDelArchivo) {
             categoriaIdentificadores(datosPalabra);
             categoriaPalabrasReservadas(datosPalabra);
             categoriaCaracteresEspeciales(datosPalabra);
@@ -284,6 +385,12 @@ public class Practica4 {
             categoriaNumerosDecimales(datosPalabra);
             categoriaConstanteString(datosPalabra);
             categoriaValorLogico(datosPalabra);
+            categoriaOperadoresMatematicos(datosPalabra);
+            categoriaOperadoresRelacionales(datosPalabra);
+            categoriaOperadoresLogicos(datosPalabra);
+            categoriaComentarios(datosPalabra);
+            String palabra = datosPalabra.getPalabra();
+
         }
     }
 
