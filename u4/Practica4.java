@@ -2,6 +2,7 @@ package u4;
 
 import javax.swing.*;
 import java.io.*;
+import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -35,7 +36,8 @@ public class Practica4 {
             int numLinea = 0;
             while ((linea = br.readLine()) != null) {  //leer el archivo por lineas
                 numLinea++;
-                logicaLectura(linea, numLinea);
+                //logicaLectura(linea, numLinea);
+                logica(linea,numLinea);
             }
             br.close();//cerrar lectura de archivo
             JOptionPane.showMessageDialog(null, "Archivo leido con exito");
@@ -50,7 +52,7 @@ public class Practica4 {
     }
 
     // Método que procesa la línea leída del archivo
-    private static void logicaLectura(String linea, int numLinea) {
+    /*private static void logicaLectura(String linea, int numLinea) {
         // Divide la línea en segmentos separados por comas
         String[] segmentos = linea.split(",");
         // Patrón para constantes de tipo String
@@ -82,6 +84,15 @@ public class Practica4 {
         if (!palabrasDelArchivo.isEmpty() && palabrasDelArchivo.last().getPalabra().equals(",")) {
             palabrasDelArchivo.removeLast();
         }
+    }*/
+    private static void logica(String linea,int numLinea){
+        Pattern pattern = Pattern.compile("\"(.+?)\"|//(.*?)//|\\d+(\\.)\\d+|\\d+|&&|\\|\\||!|\\+|-|\\*|/|:=|<=|>=|<|>|==|!=|[(),;:]|true|false|program|begin|end|read|write|if|else|while|repeat|until|int|real|string|bool|var|then|do|[a-zA-Z]+[a-zA-Z0-9_]*[#$%&?]");
+        Matcher matcher = pattern.matcher(linea);
+        while (matcher.find()) {
+            if (!matcher.group().matches("\\s+")) {
+                palabrasDelArchivo.addLast(new DatosPalabra(matcher.group(), numLinea));
+            }
+        }//no se encontro coincidencia
     }
 
     private static void categoriaIdentificadores(DatosPalabra datosPalabra) {
@@ -110,95 +121,82 @@ public class Practica4 {
 
     private static void categoriaPalabrasReservadas(DatosPalabra datosPalabra) {
         String palabra = datosPalabra.getPalabra();
-        switch (palabra) {
-            case "program":
-                datosPalabra.setEsIdentificador(-1);
-                datosPalabra.setValorToken(-1);
-                System.out.println(datosPalabra);
-                break;
-            case "begin":
-                datosPalabra.setEsIdentificador(-1);
-                datosPalabra.setValorToken(-2);
-                System.out.println(datosPalabra);
-                break;
-            case "end":
-                datosPalabra.setEsIdentificador(-1);
-                datosPalabra.setValorToken(-3);
-                System.out.println(datosPalabra);
-                break;
-            case "read":
-                datosPalabra.setEsIdentificador(-1);
-                datosPalabra.setValorToken(-4);
-                System.out.println(datosPalabra);
-                break;
-            case "write":
-                datosPalabra.setEsIdentificador(-1);
-                datosPalabra.setValorToken(-5);
-                System.out.println(datosPalabra);
-                break;
-            case "if":
-                datosPalabra.setEsIdentificador(-1);
-                datosPalabra.setValorToken(-6);
-                System.out.println(datosPalabra);
-                break;
-            case "else":
-                datosPalabra.setEsIdentificador(-1);
-                datosPalabra.setValorToken(-7);
-                System.out.println(datosPalabra);
-                break;
-            case "while":
-                datosPalabra.setEsIdentificador(-1);
-                datosPalabra.setValorToken(-8);
-                System.out.println(datosPalabra);
-                break;
-            case "repeat":
-                datosPalabra.setEsIdentificador(-1);
-                datosPalabra.setValorToken(-9);
-                System.out.println(datosPalabra);
-                break;
-            case "until":
-                datosPalabra.setEsIdentificador(-1);
-                datosPalabra.setValorToken(-10);
-                System.out.println(datosPalabra);
-                break;
-            case "int":
-                datosPalabra.setEsIdentificador(-1);
-                datosPalabra.setValorToken(-11);
-                System.out.println(datosPalabra);
-                break;
-            case "real":
-                datosPalabra.setEsIdentificador(-1);
-                datosPalabra.setValorToken(-12);
-                System.out.println(datosPalabra);
-                break;
-            case "string":
-                datosPalabra.setEsIdentificador(-1);
-                datosPalabra.setValorToken(-13);
-                System.out.println(datosPalabra);
-                break;
-            case "bool":
-                datosPalabra.setEsIdentificador(-1);
-                datosPalabra.setValorToken(-14);
-                System.out.println(datosPalabra);
-                break;
-            case "var":
-                datosPalabra.setEsIdentificador(-1);
-                datosPalabra.setValorToken(-15);
-                System.out.println(datosPalabra);
-                break;
-            case "then":
-                datosPalabra.setEsIdentificador(-1);
-                datosPalabra.setValorToken(-16);
-                System.out.println(datosPalabra);
-                break;
-            case "do":
-                datosPalabra.setEsIdentificador(-1);
-                datosPalabra.setValorToken(-17);
-                System.out.println(datosPalabra);
-                break;
-            default:
-                // No es una palabra reservada
-                break;
+        if (palabra.matches("program|begin|end|read|write|if|else|while|repeat|until|int|real|string|bool|var|then|do")) {
+            datosPalabra.setEsIdentificador(-1);
+
+            switch (palabra) {
+                case "program":
+                    datosPalabra.setValorToken(-1);
+                    System.out.println(datosPalabra);
+                    break;
+                case "begin":
+                    datosPalabra.setValorToken(-2);
+                    System.out.println(datosPalabra);
+                    break;
+                case "end":
+                    datosPalabra.setValorToken(-3);
+                    System.out.println(datosPalabra);
+                    break;
+                case "read":
+                    datosPalabra.setValorToken(-4);
+                    System.out.println(datosPalabra);
+                    break;
+                case "write":
+                    datosPalabra.setValorToken(-5);
+                    System.out.println(datosPalabra);
+                    break;
+                case "if":
+                    datosPalabra.setValorToken(-6);
+                    System.out.println(datosPalabra);
+                    break;
+                case "else":
+                    datosPalabra.setValorToken(-7);
+                    System.out.println(datosPalabra);
+                    break;
+                case "while":
+                    datosPalabra.setValorToken(-8);
+                    System.out.println(datosPalabra);
+                    break;
+                case "repeat":
+                    datosPalabra.setValorToken(-9);
+                    System.out.println(datosPalabra);
+                    break;
+                case "until":
+                    datosPalabra.setValorToken(-10);
+                    System.out.println(datosPalabra);
+                    break;
+                case "int":
+                    datosPalabra.setValorToken(-11);
+                    System.out.println(datosPalabra);
+                    break;
+                case "real":
+                    datosPalabra.setValorToken(-12);
+                    System.out.println(datosPalabra);
+                    break;
+                case "string":
+                    datosPalabra.setValorToken(-13);
+                    System.out.println(datosPalabra);
+                    break;
+                case "bool":
+                    datosPalabra.setValorToken(-14);
+                    System.out.println(datosPalabra);
+                    break;
+                case "var":
+                    datosPalabra.setValorToken(-15);
+                    System.out.println(datosPalabra);
+                    break;
+                case "then":
+                    datosPalabra.setValorToken(-16);
+                    System.out.println(datosPalabra);
+                    break;
+                case "do":
+                    datosPalabra.setValorToken(-17);
+                    System.out.println(datosPalabra);
+                    break;
+                default:
+                    // No es una palabra reservada
+                    break;
+            }
         }
     }
 
@@ -244,7 +242,7 @@ public class Practica4 {
 
     private static void categoriaNumerosDecimales(DatosPalabra datosPalabra) {
         String palabra = datosPalabra.getPalabra();
-        if (palabra.matches("(-)?\\d+(\\.)\\d+")) {
+        if (palabra.matches("\\d+(\\.)\\d+")) { //modificaciones al (-)?
             datosPalabra.setEsIdentificador(-1);
             datosPalabra.setValorToken(-62);
             System.out.println(datosPalabra);
@@ -262,20 +260,20 @@ public class Practica4 {
 
     private static void categoriaValorLogico(DatosPalabra datosPalabra) {
         String palabra = datosPalabra.getPalabra();
-        switch (palabra) {
-            case "true":
-                datosPalabra.setEsIdentificador(-1);
-                datosPalabra.setValorToken(-64);
-                System.out.println(datosPalabra);
-                break;
-            case "false":
-                datosPalabra.setEsIdentificador(-1);
-                datosPalabra.setValorToken(-65);
-                System.out.println(datosPalabra);
-                break;
-            default:
-                // No es un valor logico
-                break;
+        if(palabra.matches("true|false")){
+            datosPalabra.setEsIdentificador(-1);
+            switch (palabra) {
+                case "true":
+                    datosPalabra.setValorToken(-64);
+                    System.out.println(datosPalabra);
+                    break;
+                case "false":
+                    datosPalabra.setValorToken(-65);
+                    System.out.println(datosPalabra);
+                    break;
+                default:
+                    break;//no es valor logico
+            }
         }
     }
 
@@ -346,7 +344,7 @@ public class Practica4 {
 
     private static void categoriaOperadoresLogicos(DatosPalabra datosPalabra){
         String palabra = datosPalabra.getPalabra();
-        if (palabra.matches("&&|\\|\\|!")) {
+        if (palabra.matches("&&|\\|\\||!")) {
             datosPalabra.setEsIdentificador(-1);
             switch (palabra) {
                 case "&&":
@@ -377,7 +375,7 @@ public class Practica4 {
     }
 
     private static void analisisLexico() {
-        for (DatosPalabra datosPalabra : palabrasDelArchivo) {
+       for (DatosPalabra datosPalabra : palabrasDelArchivo) {
             categoriaIdentificadores(datosPalabra);
             categoriaPalabrasReservadas(datosPalabra);
             categoriaCaracteresEspeciales(datosPalabra);
@@ -389,8 +387,6 @@ public class Practica4 {
             categoriaOperadoresRelacionales(datosPalabra);
             categoriaOperadoresLogicos(datosPalabra);
             categoriaComentarios(datosPalabra);
-            String palabra = datosPalabra.getPalabra();
-
         }
     }
 
@@ -409,7 +405,11 @@ public class Practica4 {
 
     public static void main(String[] args) {
         if (leerArchivo()) {
-            for (DatosPalabra datosPalabra : palabrasDelArchivo) {
+            //for (DatosPalabra datosPalabra : palabrasDelArchivo) {
+              //  System.out.println(datosPalabra.getPalabra());
+            //}
+            System.out.println("-------------------------------------------------");
+            for(DatosPalabra datosPalabra : palabrasDelArchivo){
                 System.out.println(datosPalabra.getPalabra());
             }
             analisisLexico();
