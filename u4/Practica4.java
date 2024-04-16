@@ -2,7 +2,6 @@ package u4;
 
 import javax.swing.*;
 import java.io.*;
-import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -10,6 +9,13 @@ public class Practica4 {
     static String nombreArchivo = "./u4/practica4.txt";
     static SinglyLinkedList<DatosPalabra> palabrasDelArchivo = new SinglyLinkedList<>();
 
+    public static void main(String[] args) {
+        if (leerArchivo()) {
+            analisisLexico();
+            errores();
+            escribirArchivo();
+        }
+    }
     private static boolean archivoLecturaTieneContenido() {
         try {
             FileReader fr = new FileReader(nombreArchivo);
@@ -36,8 +42,7 @@ public class Practica4 {
             int numLinea = 0;
             while ((linea = br.readLine()) != null) {  //leer el archivo por lineas
                 numLinea++;
-                //logicaLectura(linea, numLinea);
-                logica(linea,numLinea);
+                logicaLectura(linea,numLinea);
             }
             br.close();//cerrar lectura de archivo
             JOptionPane.showMessageDialog(null, "Archivo leido con exito");
@@ -52,47 +57,22 @@ public class Practica4 {
     }
 
     // Método que procesa la línea leída del archivo
-    /*private static void logicaLectura(String linea, int numLinea) {
-        // Divide la línea en segmentos separados por comas
-        String[] segmentos = linea.split(",");
-        // Patrón para constantes de tipo String
-        Pattern pString = Pattern.compile("\"(.*?)\"");
-        for (String segmento : segmentos) {
-            // Verifica si el segmento es un comentario
-            Pattern pComentario = Pattern.compile("//(.*?)//");
-            Matcher mComentario = pComentario.matcher(segmento);
-            // Verifica si el segmento es una constante de tipo String
-            Matcher mString = pString.matcher(segmento);
-            if (mComentario.find()) {
-                // Si el segmento es un comentario, trata todo el segmento como un comentario
-                palabrasDelArchivo.addLast(new DatosPalabra(mComentario.group(), numLinea));
-            } else if (mString.find()) {
-                // Si el segmento es una constante de tipo String, trata todo el segmento como una constante de tipo String
-                palabrasDelArchivo.addLast(new DatosPalabra(mString.group(), numLinea));
-            } else {
-                // Si el segmento no tiene un comentario ni una constante String, divide el segmento en palabras
-                String[] palabras = segmento.split("\\s+");
-                for (String palabra : palabras) {
-                    if (!palabra.trim().isEmpty()) { // Verifica si la cadena no está vacia después de eliminar los espacios en blanco
-                        palabrasDelArchivo.addLast(new DatosPalabra(palabra.trim(), numLinea)); //Agrega las palabras a la lista despues de eliminar los espacios en blanco
-                    }
-                }
-            }
-            palabrasDelArchivo.addLast(new DatosPalabra(",", numLinea)); // Agrega la coma después de procesar cada segmento
-        }
-        // Elimina la última coma que se agregó al final de la línea
-        if (!palabrasDelArchivo.isEmpty() && palabrasDelArchivo.last().getPalabra().equals(",")) {
-            palabrasDelArchivo.removeLast();
-        }
-    }*/
-    private static void logica(String linea,int numLinea){
-        Pattern pattern = Pattern.compile("\"(.+?)\"|//(.*?)//|\\d+(\\.)\\d+|\\d+|&&|\\|\\||!|\\+|-|\\*|/|:=|<=|>=|<|>|==|!=|[(),;:]|true|false|program|begin|end|read|write|if|else|while|repeat|until|int|real|string|bool|var|then|do|[a-zA-Z]+[a-zA-Z0-9_]*[#$%&?]");
+    private static void logicaLectura(String linea,int numLinea){
+        Pattern pattern = Pattern.compile("\"(.+?)\"|//(.*?)//|\\d+(\\.)\\d+|\\d+|&&|\\|\\||!|\\+|-|\\*|/|:=|<=|>=|<|>|==|!=|[(),;:]|true|false|program|begin|end|read|write|if|else|while|repeat|until|int|real|string|bool|var|then|do|[a-zA-Z]+[a-zA-Z0-9_]*[#$%&?]|\\s+");
         Matcher matcher = pattern.matcher(linea);
+        int start = 0;
         while (matcher.find()) {
+            if (matcher.start() != start) {
+                palabrasDelArchivo.addLast(new DatosPalabra(linea.substring(start, matcher.start()).trim(), numLinea));
+            }
             if (!matcher.group().matches("\\s+")) {
                 palabrasDelArchivo.addLast(new DatosPalabra(matcher.group(), numLinea));
             }
+            start = matcher.end();
         }//no se encontro coincidencia
+        if (start != linea.length()) {
+            palabrasDelArchivo.addLast(new DatosPalabra(linea.substring(start).trim(), numLinea));
+        }
     }
 
     private static void categoriaIdentificadores(DatosPalabra datosPalabra) {
@@ -102,19 +82,19 @@ public class Practica4 {
             char ultimoChar = palabra.charAt(palabra.length() - 1);
             if (ultimoChar == '#') { //"identificadores tipo cadena de texto
                 datosPalabra.setValorToken(-53);
-                System.out.println(datosPalabra);
+                //System.out.println(datosPalabra);
             } else if (ultimoChar == '%') { //identificadores de valor real
                 datosPalabra.setValorToken(-52);
-                System.out.println(datosPalabra);
+                //System.out.println(datosPalabra);
             } else if (ultimoChar == '&') {//identificadores de valor entero
                 datosPalabra.setValorToken(-51);
-                System.out.println(datosPalabra);
+                //System.out.println(datosPalabra);
             } else if (ultimoChar == '$') {//identificadores de valor logico
                 datosPalabra.setValorToken(-54);
-                System.out.println(datosPalabra);
+                //System.out.println(datosPalabra);
             } else if (ultimoChar == '?') {//identificadores tipo programa
                 datosPalabra.setValorToken(-55);
-                System.out.println(datosPalabra);
+                //System.out.println(datosPalabra);
             }
         }//no es identificador
     }
@@ -127,71 +107,71 @@ public class Practica4 {
             switch (palabra) {
                 case "program":
                     datosPalabra.setValorToken(-1);
-                    System.out.println(datosPalabra);
+                    //System.out.println(datosPalabra);
                     break;
                 case "begin":
                     datosPalabra.setValorToken(-2);
-                    System.out.println(datosPalabra);
+                    //System.out.println(datosPalabra);
                     break;
                 case "end":
                     datosPalabra.setValorToken(-3);
-                    System.out.println(datosPalabra);
+                    //System.out.println(datosPalabra);
                     break;
                 case "read":
                     datosPalabra.setValorToken(-4);
-                    System.out.println(datosPalabra);
+                    //System.out.println(datosPalabra);
                     break;
                 case "write":
                     datosPalabra.setValorToken(-5);
-                    System.out.println(datosPalabra);
+                    //System.out.println(datosPalabra);
                     break;
                 case "if":
                     datosPalabra.setValorToken(-6);
-                    System.out.println(datosPalabra);
+                    //System.out.println(datosPalabra);
                     break;
                 case "else":
                     datosPalabra.setValorToken(-7);
-                    System.out.println(datosPalabra);
+                    //System.out.println(datosPalabra);
                     break;
                 case "while":
                     datosPalabra.setValorToken(-8);
-                    System.out.println(datosPalabra);
+                    //System.out.println(datosPalabra);
                     break;
                 case "repeat":
                     datosPalabra.setValorToken(-9);
-                    System.out.println(datosPalabra);
+                    //System.out.println(datosPalabra);
                     break;
                 case "until":
                     datosPalabra.setValorToken(-10);
-                    System.out.println(datosPalabra);
+                    //System.out.println(datosPalabra);
                     break;
                 case "int":
                     datosPalabra.setValorToken(-11);
-                    System.out.println(datosPalabra);
+                    //System.out.println(datosPalabra);
                     break;
                 case "real":
                     datosPalabra.setValorToken(-12);
-                    System.out.println(datosPalabra);
+                    //System.out.println(datosPalabra);
                     break;
                 case "string":
                     datosPalabra.setValorToken(-13);
-                    System.out.println(datosPalabra);
+                    //System.out.println(datosPalabra);
                     break;
                 case "bool":
                     datosPalabra.setValorToken(-14);
-                    System.out.println(datosPalabra);
+                    //System.out.println(datosPalabra);
                     break;
                 case "var":
                     datosPalabra.setValorToken(-15);
-                    System.out.println(datosPalabra);
+                    //System.out.println(datosPalabra);
                     break;
                 case "then":
                     datosPalabra.setValorToken(-16);
-                    System.out.println(datosPalabra);
+                    //System.out.println(datosPalabra);
                     break;
                 case "do":
                     datosPalabra.setValorToken(-17);
-                    System.out.println(datosPalabra);
+                    //System.out.println(datosPalabra);
                     break;
                 default:
                     // No es una palabra reservada
@@ -207,23 +187,23 @@ public class Practica4 {
             switch (palabra) {
                 case "(":
                     datosPalabra.setValorToken(-73);
-                    System.out.println(datosPalabra);
+                    //System.out.println(datosPalabra);
                     break;
                 case ")":
                     datosPalabra.setValorToken(-74);
-                    System.out.println(datosPalabra);
+                    //System.out.println(datosPalabra);
                     break;
                 case ",":
                     datosPalabra.setValorToken(-76);
-                    System.out.println(datosPalabra);
+                    //System.out.println(datosPalabra);
                     break;
                 case ";":
                     datosPalabra.setValorToken(-75);
-                    System.out.println(datosPalabra);
+                    //System.out.println(datosPalabra);
                     break;
                 case ":":
                     datosPalabra.setValorToken(-77); //Se añadio el -77 para el caracter especial : no estaba en la tabla de tokens
-                    System.out.println(datosPalabra);
+                    //System.out.println(datosPalabra);
                     break;
                 default:
                     break;
@@ -236,7 +216,7 @@ public class Practica4 {
         if (palabra.matches("\\d+")) {
             datosPalabra.setEsIdentificador(-1);
             datosPalabra.setValorToken(-61);
-            System.out.println(datosPalabra);
+            //System.out.println(datosPalabra);
         }//no es numero entero
     }
 
@@ -245,7 +225,7 @@ public class Practica4 {
         if (palabra.matches("\\d+(\\.)\\d+")) { //modificaciones al (-)?
             datosPalabra.setEsIdentificador(-1);
             datosPalabra.setValorToken(-62);
-            System.out.println(datosPalabra);
+            //System.out.println(datosPalabra);
         }//no es numero decimal
     }
 
@@ -254,7 +234,7 @@ public class Practica4 {
         if (palabra.matches("\"(.+?)\"")) {
             datosPalabra.setEsIdentificador(-1);
             datosPalabra.setValorToken(-63);
-            System.out.println(datosPalabra);
+            //System.out.println(datosPalabra);
         }//no es constante string
     }
 
@@ -265,11 +245,11 @@ public class Practica4 {
             switch (palabra) {
                 case "true":
                     datosPalabra.setValorToken(-64);
-                    System.out.println(datosPalabra);
+                    //System.out.println(datosPalabra);
                     break;
                 case "false":
                     datosPalabra.setValorToken(-65);
-                    System.out.println(datosPalabra);
+                    //System.out.println(datosPalabra);
                     break;
                 default:
                     break;//no es valor logico
@@ -284,23 +264,23 @@ public class Practica4 {
             switch (palabra) {
                 case "+":
                     datosPalabra.setValorToken(-24);
-                    System.out.println(datosPalabra);
+                    //System.out.println(datosPalabra);
                     break;
                 case "-":
                     datosPalabra.setValorToken(-25);
-                    System.out.println(datosPalabra);
+                    //System.out.println(datosPalabra);
                     break;
                 case "*":
                     datosPalabra.setValorToken(-21);
-                    System.out.println(datosPalabra);
+                    //System.out.println(datosPalabra);
                     break;
                 case "/":
                     datosPalabra.setValorToken(-22);
-                    System.out.println(datosPalabra);
+                    //System.out.println(datosPalabra);
                     break;
                 case ":=":
                     datosPalabra.setValorToken(-26);
-                    System.out.println(datosPalabra);
+                    //System.out.println(datosPalabra);
                 default:
                     break;
             }
@@ -314,27 +294,27 @@ public class Practica4 {
             switch (palabra) {
                 case "<":
                     datosPalabra.setValorToken(-31);
-                    System.out.println(datosPalabra);
+                    //System.out.println(datosPalabra);
                     break;
                 case "<=":
                     datosPalabra.setValorToken(-32);
-                    System.out.println(datosPalabra);
+                    //System.out.println(datosPalabra);
                     break;
                 case ">":
                     datosPalabra.setValorToken(-33);
-                    System.out.println(datosPalabra);
+                    //System.out.println(datosPalabra);
                     break;
                 case ">=":
                     datosPalabra.setValorToken(-34);
-                    System.out.println(datosPalabra);
+                    //System.out.println(datosPalabra);
                     break;
                 case "==":
                     datosPalabra.setValorToken(-35);
-                    System.out.println(datosPalabra);
+                    //System.out.println(datosPalabra);
                     break;
                 case "!=":
                     datosPalabra.setValorToken(-36);
-                    System.out.println(datosPalabra);
+                    //System.out.println(datosPalabra);
                     break;
                 default:
                     break;
@@ -349,15 +329,15 @@ public class Practica4 {
             switch (palabra) {
                 case "&&":
                     datosPalabra.setValorToken(-41);
-                    System.out.println(datosPalabra);
+                    //System.out.println(datosPalabra);
                     break;
                 case "||":
                     datosPalabra.setValorToken(-42);
-                    System.out.println(datosPalabra);
+                    //System.out.println(datosPalabra);
                     break;
                 case "!":
                     datosPalabra.setValorToken(-43);
-                    System.out.println(datosPalabra);
+                    //System.out.println(datosPalabra);
                     break;
                 default:
                     break;
@@ -369,11 +349,12 @@ public class Practica4 {
         String palabra = datosPalabra.getPalabra();
         if (palabra.matches("//(.*?)//")) {
             datosPalabra.setEsIdentificador(-1);
-            datosPalabra.setValorToken(-71);
-            System.out.println(datosPalabra);
+
+            //System.out.println(datosPalabra);
         }
     }
 
+    //Se analiza una serie de caracteres guardada en la lista de palabras
     private static void analisisLexico() {
        for (DatosPalabra datosPalabra : palabrasDelArchivo) {
             categoriaIdentificadores(datosPalabra);
@@ -390,30 +371,42 @@ public class Practica4 {
         }
     }
 
+    //Metodo para escribir en el archivo .txt las palabras analizadas
     public static void escribirArchivo() {
         try {
             BufferedWriter writer = new BufferedWriter(new FileWriter("u4/resultadoAnalisisLexico.txt"));
             for (DatosPalabra datosPalabra : palabrasDelArchivo) {
-                writer.write(datosPalabra.toString());
-                writer.newLine();
+                if (datosPalabra.getValorToken()!=0){
+                    writer.write(datosPalabra.toString());
+                    writer.newLine();
+                }
+
             }
             writer.close();
         } catch (IOException e) {
             JOptionPane.showMessageDialog(null, "Conflicto para escribir el archivo");
         }
     }
-
-    public static void main(String[] args) {
-        if (leerArchivo()) {
-            //for (DatosPalabra datosPalabra : palabrasDelArchivo) {
-              //  System.out.println(datosPalabra.getPalabra());
-            //}
-            System.out.println("-------------------------------------------------");
-            for(DatosPalabra datosPalabra : palabrasDelArchivo){
-                System.out.println(datosPalabra.getPalabra());
+    public static void errores(){
+        for (DatosPalabra datosPalabra : palabrasDelArchivo) {
+            if (datosPalabra.getValorToken()==0) {
+                int longitud = datosPalabra.getPalabra().length();
+                boolean ignoreDot = false;
+                if (datosPalabra.getPalabra().charAt(0) == '/' && datosPalabra.getPalabra().charAt(1) == '/' && datosPalabra.getPalabra().charAt(longitud - 1) == '/' && datosPalabra.getPalabra().charAt(longitud - 2) == '/' | datosPalabra.getPalabra().contains(".")) {
+                    continue;
+                }
+                if (!ignoreDot) {
+                    if (datosPalabra.getPalabra().equals(".")) {
+                        ignoreDot = true;
+                        continue;
+                    }
+                }
+                if (!ignoreDot) {
+                    System.out.println("Error en la linea: " + datosPalabra.getPosicion() + ". En la palabra: " + datosPalabra.getPalabra());
+                }
             }
-            analisisLexico();
-            escribirArchivo();
         }
     }
+
+
 }
