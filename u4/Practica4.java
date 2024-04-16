@@ -392,7 +392,7 @@ public class Practica4 {
             if (datosPalabra.getValorToken()==0) {
                 int longitud = datosPalabra.getPalabra().length();
                 boolean ignoreDot = false;
-                if (datosPalabra.getPalabra().charAt(0) == '/' && datosPalabra.getPalabra().charAt(1) == '/' && datosPalabra.getPalabra().charAt(longitud - 1) == '/' && datosPalabra.getPalabra().charAt(longitud - 2) == '/' | datosPalabra.getPalabra().contains(".")) {
+                if (datosPalabra.getPalabra().charAt(0) == '/' && datosPalabra.getPalabra().charAt(1) == '/' && datosPalabra.getPalabra().charAt(longitud - 1) == '/' && datosPalabra.getPalabra().charAt(longitud - 2) == '/') {
                     continue;
                 }
                 if (!ignoreDot) {
@@ -407,6 +407,4 @@ public class Practica4 {
             }
         }
     }
-
-
 }
