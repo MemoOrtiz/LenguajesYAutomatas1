@@ -8,11 +8,12 @@ import java.util.regex.Pattern;
 public class Practica4 {
     static String nombreArchivo = "./u4/practica4.txt";
     static SinglyLinkedList<DatosPalabra> palabrasDelArchivo = new SinglyLinkedList<>();
+    static SinglyLinkedList<DatosPalabra> erroresDelArchivo = new SinglyLinkedList<>();
 
     public static void main(String[] args) {
         if (leerArchivo()) {
             analisisLexico();
-            errores();
+            erroresAnalisis();
             escribirArchivo();
         }
     }
@@ -58,7 +59,7 @@ public class Practica4 {
 
     // Método que procesa la línea leída del archivo
     private static void logicaLectura(String linea,int numLinea){
-        Pattern pattern = Pattern.compile("\"(.+?)\"|//(.*?)//|\\d+(\\.)\\d+|\\d+|&&|\\|\\||!|\\+|-|\\*|/|:=|<=|>=|<|>|==|!=|[(),;:]|true|false|program|begin|end|read|write|if|else|while|repeat|until|int|real|string|bool|var|then|do|[a-zA-Z]+[a-zA-Z0-9_]*[#$%&?]|\\s+");
+        Pattern pattern = Pattern.compile("\"(.+?)\"|//(.*?)//|\\d+(\\.)\\d+|\\d+|&&|\\|\\||!|\\+|-|\\*|/|:=|<=|>=|<|>|==|!=|[(),;:]|[a-zA-Z]+[a-zA-Z0-9_]*[#$%&?]|\\s+");
         Matcher matcher = pattern.matcher(linea);
         int start = 0;
         while (matcher.find()) {
@@ -371,40 +372,55 @@ public class Practica4 {
         }
     }
 
+    public static void erroresAnalisis(){
+        for (DatosPalabra datosPalabra : palabrasDelArchivo) {
+            if (datosPalabra.getValorToken()==0) {
+                int longitud = datosPalabra.getPalabra().length();
+                boolean ignoreDot = false;
+                if (datosPalabra.getPalabra().charAt(0) == '/' && datosPalabra.getPalabra().charAt(1) == '/' && datosPalabra.getPalabra().charAt(longitud - 1) == '/' && datosPalabra.getPalabra().charAt(longitud - 2) == '/'|| datosPalabra.getPalabra().equals(".")) {
+                    continue;
+                }else{
+                    erroresDelArchivo.addLast(new DatosPalabra(datosPalabra.getPalabra().trim(), datosPalabra.getValorToken(), datosPalabra.getEsIdentificador(), datosPalabra.getPosicion()));
+                }
+            }
+        }
+    }
+
     //Metodo para escribir en el archivo .txt las palabras analizadas
-    public static void escribirArchivo() {
+    private static void escribirArchivoTablaDeTokens() {
         try {
-            BufferedWriter writer = new BufferedWriter(new FileWriter("u4/resultadoAnalisisLexico.txt"));
+            BufferedWriter writer = new BufferedWriter(new FileWriter("u4/Tabla de Tokens.txt"));
             for (DatosPalabra datosPalabra : palabrasDelArchivo) {
                 if (datosPalabra.getValorToken()!=0){
                     writer.write(datosPalabra.toString());
                     writer.newLine();
                 }
-
             }
             writer.close();
         } catch (IOException e) {
             JOptionPane.showMessageDialog(null, "Conflicto para escribir el archivo");
         }
     }
-    public static void errores(){
-        for (DatosPalabra datosPalabra : palabrasDelArchivo) {
-            if (datosPalabra.getValorToken()==0) {
-                int longitud = datosPalabra.getPalabra().length();
-                boolean ignoreDot = false;
-                if (datosPalabra.getPalabra().charAt(0) == '/' && datosPalabra.getPalabra().charAt(1) == '/' && datosPalabra.getPalabra().charAt(longitud - 1) == '/' && datosPalabra.getPalabra().charAt(longitud - 2) == '/') {
-                    continue;
-                }
-                if (!ignoreDot) {
-                    if (datosPalabra.getPalabra().equals(".")) {
-                        ignoreDot = true;
-                        continue;
-                    }
-                }
-                if (!ignoreDot) {
-                    System.out.println("Error en la linea: " + datosPalabra.getPosicion() + ". En la palabra: " + datosPalabra.getPalabra());
-                }
+
+    public static void escribirArchivoTablaDeErrores(){
+        try {
+            BufferedWriter writer = new BufferedWriter(new FileWriter("u4/Tabla de Errores.txt"));
+            for (DatosPalabra datosPalabra : erroresDelArchivo) {
+                writer.write("Error en la linea: " + datosPalabra.getPosicion() + ". En la palabra: " + datosPalabra.getPalabra());
+                writer.newLine();
             }
+            writer.close();
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(null, "Conflicto para escribir el archivo");
         }
     }
+
+    private static void escribirArchivo(){
+        if (erroresDelArchivo.isEmpty()) {
+            escribirArchivoTablaDeTokens();
+        } else {
+            escribirArchivoTablaDeErrores();
+        }
+    }
+
 }

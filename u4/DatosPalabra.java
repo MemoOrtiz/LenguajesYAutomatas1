@@ -6,6 +6,12 @@ public class DatosPalabra {
     private int esIdentificador;
     private int posicion;
 
+    public DatosPalabra(String palabra, int valorToken, int esIdentificador, int posicion) {
+        this.palabra = palabra;
+        this.valorToken = valorToken;
+        this.esIdentificador = esIdentificador;
+        this.posicion = posicion;
+    }
     public DatosPalabra(String palabra, int posicion) {
         this.palabra = palabra;
         this.posicion = posicion;
