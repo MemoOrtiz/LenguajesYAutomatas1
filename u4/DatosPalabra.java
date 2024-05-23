@@ -5,6 +5,7 @@ public class DatosPalabra {
     private int valorToken;
     private int esIdentificador;
     private int posicion;
+    private int lineaSintactico;
 
     public DatosPalabra(String palabra, int valorToken, int esIdentificador, int posicion) {
         this.palabra = palabra;
@@ -16,6 +17,13 @@ public class DatosPalabra {
         this.palabra = palabra;
         this.posicion = posicion;
     }
+    public DatosPalabra(String palabra, int valorToken, int esIdentificador, int posicion, int lineaSintactico) {
+        this.palabra = palabra;
+        this.valorToken = valorToken;
+        this.esIdentificador = esIdentificador;
+        this.posicion = posicion;
+        this.lineaSintactico = lineaSintactico;
+    }
     public String getPalabra() {
         return palabra;
     }
@@ -24,7 +32,7 @@ public class DatosPalabra {
     public int getPosicion() {
         return posicion;
     }
-
+    public int getLineaSintactico() { return lineaSintactico; }
 
     public void setValorToken(int valorToken) { this.valorToken = valorToken; }
     public void setEsIdentificador(int esIdentificador) { this.esIdentificador = esIdentificador; }

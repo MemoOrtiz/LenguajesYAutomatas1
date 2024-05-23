@@ -1,14 +1,34 @@
-hola# || juan$ && pepito& "hi" 12+12.12
-memo ,hola1# folse {victor_1}
+program nombre?;
+var
+int :  uno&, dos& ;
+real  : tres% ;
+string : cuatro#;
+bool : cinco$  ;
+begin
+uno& :=  10 + ( 39 * dos& ) ;
+cinco$  := ( uno& <= 10 );
+if ( uno& > 10 ) then
+begin
+write (dos&);
+end
+else
+begin
+write ( dos&);
+cinco$ := ( 10  * (89 - 100) )  >= ( dos& ) ;
+end
+dos& := 1;
+while ( dos& >  5 ) do
+begin
+dos& := dos& + 1;
+write ( dos&) ;
+end
+cinco$ := false;
+repeat
+begin
+dos& := dos& + 2;
+write (dos&);
+read ( tres% );
+end
+until ( cinco$ == true );
 
-"hola"      begin:program end(int)
-
-end         program  do:=while for*?¡¿= |° 🤣|
-manuel
-hola#,como#,estan% si$ acaso& 11    holadenuevo# ; , while juanito
-//esto es un comentario// "hola" bien$ , //YO MUY BIEN//, oki%
-bueno# , adios# , 15.4 , 1234 , -13.35
-//hola// , de nuevo% , 1234 hi& , "hola mundo", "soy yo"
-begin, int , "hello again" true ,false , hola&.juan#
-10+5 -17.24 memo#, 15.32 hola#; 10 >= 2 , juanito&<=pepito&
-..hello..
+end
