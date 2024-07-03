@@ -109,9 +109,9 @@ public class Practica5 {
                 if (listaDeTokens.get(numLinea).getValorToken() == -75) {
                     numLinea++;
                     return numLinea;
-                } throw new ValidacionException("Error en la línea: " + numLinea + ". Se esperaba un ;");
-            } throw new ValidacionException("Error en la línea: " + numLinea + ". Se esperaba un identificador");
-        } throw new ValidacionException("Error en la línea: " + numLinea + ". Se esperaba la palabra program");
+                } throw new ValidacionException("Error en la línea: " + listaDeTokens.get(numLinea).getPosicion() + ". Se esperaba un ;");
+            } throw new ValidacionException("Error en la línea: " + listaDeTokens.get(numLinea).getPosicion() + ". Se esperaba un identificador");
+        } throw new ValidacionException("Error en la línea: " + listaDeTokens.get(numLinea).getPosicion() + ". Se esperaba la palabra program");
     }
 
     public static int validarIdentificadores(LinkedList<DatosPalabra> listaDeTokens, int numLinea) throws ValidacionException {
@@ -132,7 +132,7 @@ public class Practica5 {
             numLinea++;
             return numLinea;
         }
-        throw new ValidacionException("Error en la línea: " + numLinea + ". Se esperaba un identificador");
+        throw new ValidacionException("Error en la línea: " +listaDeTokens.get(numLinea).getPosicion() + ". Se esperaba un identificador");
         //return numLinea;
     }
 
@@ -151,7 +151,7 @@ public class Practica5 {
             numLinea++;
             return numLinea;
         }
-        throw new ValidacionException("Error en la línea: " + numLinea + ". Se esperaba un tipo de dato");
+        throw new ValidacionException("Error en la línea: " + listaDeTokens.get(numLinea).getPosicion() + ". Se esperaba un tipo de dato");
     }
 
 
@@ -163,7 +163,7 @@ public class Practica5 {
             }
              return numLinea;
         }
-        throw new ValidacionException("Error en la línea: " + numLinea + ". Se esperaba la palabra var");
+        throw new ValidacionException("Error en la línea: " + listaDeTokens.get(numLinea).getPosicion() + ". Se esperaba la palabra var");
 
     }
 
@@ -186,10 +186,10 @@ public class Practica5 {
                 numLinea++;
                 return numLinea;
             } else {
-                throw new ValidacionException("Error en la línea: " + numLinea + ". Se esperaba un punto y coma \"; \"");
+                throw new ValidacionException("Error en la línea: " + listaDeTokens.get(numLinea).getPosicion() + ". Se esperaba un punto y coma \"; \"");
             }
         }
-        throw new ValidacionException("Error en la línea: " + numLinea + ". Se esperaba dos puntos \":\"");
+        throw new ValidacionException("Error en la línea: " + listaDeTokens.get(numLinea).getPosicion() + ". Se esperaba dos puntos \":\"");
     }
 
     public static int validarIdentificadoresConComa(LinkedList<DatosPalabra> listaDeTokens, int numLinea) throws ValidacionException {
@@ -211,25 +211,27 @@ public class Practica5 {
         if (listaDeTokens.get(numLinea).getValorToken() == -2) {
             numLinea++;
             numLinea = contenidoCuerpo2(listaDeTokens, numLinea);
-            if(listaDeTokens.get(numLinea).getValorToken() == -3){
+            if(numLinea == listaDeTokens.size()-1 && listaDeTokens.get(numLinea).getValorToken() == -3){
                 numLinea++;
                 return numLinea;
             }
-                throw new ValidacionException("Error en la línea: " + numLinea + ". Se esperaba la palabra end");
+                throw new ValidacionException("Error en la línea: " + listaDeTokens.get(numLinea).getPosicion() + ". Se esperaba la palabra end");
         }
-           throw new ValidacionException("Error en la línea: " + numLinea + ". Se esperaba la palabra begin");
+           throw new ValidacionException("Error en la línea: " + listaDeTokens.get(numLinea).getPosicion() + ". Se esperaba la palabra begin");
         //return numLinea;
     }
 
     public static int contenidoCuerpo2(LinkedList<DatosPalabra> listaDeTokens, int numLinea) throws ValidacionException {
         numLinea = estructuraSentencias(listaDeTokens, numLinea);
         if(listaDeTokens.get(numLinea).getValorToken() != -3){
-            throw new ValidacionException("Error en la línea: " + numLinea + ". Se esperaba la palabra end");
+            throw new ValidacionException("Error en la línea: " + listaDeTokens.get(numLinea).getPosicion() + ". Se esperaba la palabra end");
         }
         return numLinea;
     }
     public static int estructuraSentencias(LinkedList<DatosPalabra> listaDeTokens, int numLinea) throws ValidacionException {
-
+        if (numLinea >= listaDeTokens.size()) {
+            throw new ValidacionException("Error en la línea: " + numLinea + ". Se esperaba la palabra end");
+        }
         numLinea = comprobarSentencias(listaDeTokens, numLinea);
         if(listaDeTokens.get(numLinea).getValorToken() == -3){
 
@@ -246,6 +248,7 @@ public class Practica5 {
             case - 8 -> numLinea = validarWhile(listaDeTokens, numLinea);
             case -9 -> numLinea = validarRepeat(listaDeTokens, numLinea);
             case -51,-52,-53,-54 -> numLinea = validarAsignacion2(listaDeTokens, numLinea);
+            default -> throw new ValidacionException("Error en la línea: " + listaDeTokens.get(numLinea).getPosicion() + ". Se esperaba una palabra reservada");
         }
         return numLinea;
     }
@@ -259,9 +262,9 @@ public class Practica5 {
                 numLinea++;
                 return numLinea;
             } else {
-                throw new ValidacionException("Error en la línea: " + numLinea + ". Se esperaba un ;");
+                throw new ValidacionException("Error en la línea: " + listaDeTokens.get(numLinea).getPosicion()+ ". Se esperaba un ;");
             }
-        }return numLinea;
+        }throw  new ValidacionException("Error en la linea : " + listaDeTokens.get(numLinea).getPosicion() + ". Se esperaba un :=");
     }
     public static int validarExpresion(LinkedList<DatosPalabra>listaDeTokens, int numLinea)throws ValidacionException{
         numLinea = validarExpresionSimple(listaDeTokens, numLinea);
@@ -296,7 +299,7 @@ public class Practica5 {
             if (listaDeTokens.get(numLinea).getValorToken() == -74){
                 numLinea++;
                 return numLinea;
-            }throw new ValidacionException("Error en la línea: " + numLinea + ". Se esperaba un ) ");
+            }throw new ValidacionException("Error en la línea: " + listaDeTokens.get(numLinea).getPosicion() + ". Se esperaba un ) ");
         }
         if (listaDeTokens.get(numLinea).getValorToken() == -51 || listaDeTokens.get(numLinea).getValorToken() == -52 ||
                 listaDeTokens.get(numLinea).getValorToken() == -53 || listaDeTokens.get(numLinea).getValorToken() == -54 ){
@@ -380,10 +383,10 @@ public static int validarLogicaRecursiva(LinkedList<DatosPalabra> listaDeTokens 
                 if (listaDeTokens.get(numLinea).getValorToken() == -3) {
                     numLinea++;
                     return numLinea;
-                }throw new ValidacionException("Error en la línea: " + numLinea + ". Se esperaba la palabra end");
-            }throw new ValidacionException("Error en la línea: " + numLinea + ". Se esperaba la palabra begin");
+                }throw new ValidacionException("Error en la línea: " + listaDeTokens.get(numLinea).getPosicion() + ". Se esperaba la palabra end");
+            }throw new ValidacionException("Error en la línea: " + listaDeTokens.get(numLinea).getPosicion() + ". Se esperaba la palabra begin");
         }
-        throw new ValidacionException("Error en la línea: " + numLinea + ". Se esperaba la palabra do");
+        throw new ValidacionException("Error en la línea: " + listaDeTokens.get(numLinea).getPosicion() + ". Se esperaba la palabra do");
     }
 
     public static int validarIf(LinkedList<DatosPalabra> listaDeTokens ,int numLinea) throws ValidacionException {
@@ -409,16 +412,16 @@ public static int validarLogicaRecursiva(LinkedList<DatosPalabra> listaDeTokens 
                             }
                         }
                     }else{
-                        throw new ValidacionException("Error en la línea: " + numLinea + ". Se esperaba la palabra then");
+                        throw new ValidacionException("Error en la línea: " + listaDeTokens.get(numLinea).getPosicion() + ". Se esperaba la palabra then");
                     }
                 }else{
-                    throw new ValidacionException("Error en la línea: " + numLinea + ". Se esperaba un )");
+                    throw new ValidacionException("Error en la línea: " + listaDeTokens.get(numLinea).getPosicion() + ". Se esperaba un )");
                 }
             }else{
-                throw new ValidacionException("Error en la línea: " + numLinea + ". Se esperaba un (");
+                throw new ValidacionException("Error en la línea: " + listaDeTokens.get(numLinea).getPosicion() + ". Se esperaba un (");
 
             }
-        }throw new ValidacionException("Error en la línea: " + numLinea + ". Se esperaba la palabra if");
+        }throw new ValidacionException("Error en la línea: " + listaDeTokens.get(numLinea).getPosicion() + ". Se esperaba la palabra if");
 
     }
     public static int validarIfRecursivo(LinkedList<DatosPalabra> listaDeTokens ,int numLinea) throws ValidacionException {
@@ -442,10 +445,10 @@ public static int validarLogicaRecursiva(LinkedList<DatosPalabra> listaDeTokens 
                 if (listaDeTokens.get(numLinea).getValorToken() == -3) {
                     numLinea++;
                     return numLinea;
-                }throw new ValidacionException("Error en la línea: " + numLinea + ". Se esperaba la palabra end");
-            }throw new ValidacionException("Error en la línea: " + numLinea + ". Se esperaba la palabra begin");
+                }throw new ValidacionException("Error en la línea: " + listaDeTokens.get(numLinea).getPosicion() + ". Se esperaba la palabra end");
+            }throw new ValidacionException("Error en la línea: " + listaDeTokens.get(numLinea).getPosicion() + ". Se esperaba la palabra begin");
 
-        }throw new ValidacionException("Error en la línea: " + numLinea + ". Se esperaba la palabra else");
+        }throw new ValidacionException("Error en la línea: " + listaDeTokens.get(numLinea).getPosicion() + ". Se esperaba la palabra else");
 
     }
     public static int validarRepeat(LinkedList<DatosPalabra> listaDeTokens ,int numLinea) throws ValidacionException {
@@ -467,19 +470,19 @@ public static int validarLogicaRecursiva(LinkedList<DatosPalabra> listaDeTokens 
                                     numLinea++;
                                     return numLinea;
                                 } else {
-                                    throw new ValidacionException("Error en la línea: " + numLinea + ". Se esperaba un ;");
+                                    throw new ValidacionException("Error en la línea: " + listaDeTokens.get(numLinea).getPosicion()+ ". Se esperaba un ;");
                                 }
                             } else {
-                                throw new ValidacionException("Error en la línea: " + numLinea + ". Se esperaba un )");
+                                throw new ValidacionException("Error en la línea: " + listaDeTokens.get(numLinea).getPosicion() + ". Se esperaba un )");
                             }
                         } else {
-                            throw new ValidacionException("Error en la línea: " + numLinea + ". Se esperaba un (");
+                            throw new ValidacionException("Error en la línea: " + listaDeTokens.get(numLinea).getPosicion() + ". Se esperaba un (");
                         }
-                    }throw new ValidacionException("Error en la línea: " + numLinea + ". Se esperaba la palabra until");
-                }throw new ValidacionException("Error en la línea: " + numLinea + ". Se esperaba la palabra end");
-            }throw new ValidacionException("Error en la línea: " + numLinea + ". Se esperaba la palabra begin");
+                    }throw new ValidacionException("Error en la línea: " + listaDeTokens.get(numLinea).getPosicion() + ". Se esperaba la palabra until");
+                }throw new ValidacionException("Error en la línea: " + listaDeTokens.get(numLinea).getPosicion() + ". Se esperaba la palabra end");
+            }throw new ValidacionException("Error en la línea: " + listaDeTokens.get(numLinea).getPosicion() + ". Se esperaba la palabra begin");
         }
-        throw new ValidacionException("Error en la línea: " + numLinea + ". Se esperaba la palabra repeat");
+        throw new ValidacionException("Error en la línea: " + listaDeTokens.get(numLinea).getPosicion() + ". Se esperaba la palabra repeat");
     }
     public static int validarWrite(LinkedList<DatosPalabra> listaDeTokens ,int numLinea) throws ValidacionException {
         int tempNumLinea;
@@ -487,11 +490,11 @@ public static int validarLogicaRecursiva(LinkedList<DatosPalabra> listaDeTokens 
             numLinea++;
             if(listaDeTokens.get(numLinea).getValorToken() == -73){
                 numLinea++;
-                tempNumLinea = validarIdentificadores(listaDeTokens,numLinea);
+                tempNumLinea = validarConstantes(listaDeTokens,numLinea);
                 if(tempNumLinea != numLinea) {
                     numLinea = tempNumLinea;
                 }else{
-                    tempNumLinea = validarConstantes(listaDeTokens,numLinea);
+                    tempNumLinea = validarIdentificadores(listaDeTokens,numLinea);
                     if(tempNumLinea != numLinea){
                         numLinea = tempNumLinea;
                     }
@@ -501,9 +504,9 @@ public static int validarLogicaRecursiva(LinkedList<DatosPalabra> listaDeTokens 
                     if (listaDeTokens.get(numLinea).getValorToken() == -75){
                         numLinea++;
                         return numLinea;
-                    }throw new ValidacionException("Error en la línea: " + numLinea + ". Se esperaba un ;");
-                } throw new ValidacionException("Error en la línea: " + numLinea + ". Se esperaba un )");
-            }throw new ValidacionException("Error en la línea: " + numLinea + ". Se esperaba un (");
+                    }throw new ValidacionException("Error en la línea: " + listaDeTokens.get(numLinea).getPosicion() + ". Se esperaba un ;");
+                } throw new ValidacionException("Error en la línea: " + listaDeTokens.get(numLinea).getPosicion() + ". Se esperaba un )");
+            }throw new ValidacionException("Error en la línea: " + listaDeTokens.get(numLinea).getPosicion() + ". Se esperaba un (");
         }
        return numLinea;
     }
@@ -518,10 +521,10 @@ public static int validarLogicaRecursiva(LinkedList<DatosPalabra> listaDeTokens 
                     if (listaDeTokens.get(numLinea).getValorToken() == -75){
                         numLinea++;
                         return numLinea;
-                    }throw new ValidacionException("Error en la línea: " + numLinea + ". Se esperaba un ;");
-                }throw new ValidacionException("Error en la línea: " + numLinea + ". Se esperaba un )");
+                    }throw new ValidacionException("Error en la línea: " + listaDeTokens.get(numLinea).getPosicion() + ". Se esperaba un ;");
+                }throw new ValidacionException("Error en la línea: " + listaDeTokens.get(numLinea).getPosicion() + ". Se esperaba un )");
             }
-            throw new ValidacionException("Error en la línea: " + numLinea + ". Se esperaba un ;(");
+            throw new ValidacionException("Error en la línea: " + listaDeTokens.get(numLinea).getPosicion() + ". Se esperaba un ;(");
         }
         return numLinea;
     }
@@ -594,7 +597,7 @@ public static int validarLogicaRecursiva(LinkedList<DatosPalabra> listaDeTokens 
             numLinea++;
             return numLinea;
         }
-        throw  new ValidacionException("Error en la línea: " + numLinea + ". Se esperaba una constante entera, real, cadena de caracteres, true o false");
+        throw  new ValidacionException("Error en la línea: " + listaDeTokens.get(numLinea).getPosicion() +  ". Se esperaba una constante entera, real, cadena de caracteres, true o false");
     }
 
     public static void main(String[] args) {
@@ -603,12 +606,13 @@ public static int validarLogicaRecursiva(LinkedList<DatosPalabra> listaDeTokens 
                 int numLinea = 0;
                 numLinea = general(listaDeTokens,numLinea);
                 int numeroFinal = listaDeTokens.getLast().getLineaSintactico();
-                System.out.println("Numero final: " + numeroFinal);
-                System.out.println("Numero de linea: " + numLinea);
+                //System.out.println("Numero final: " + numeroFinal);
+                //System.out.println("Numero de linea: " + numLinea);
                 JOptionPane.showMessageDialog(null, "El archivo se ha validado correctamente");
             }
         }catch (ValidacionException e){
-            System.out.println("Error en la línea " + e.getNumLinea()+  ": " + e.getMessage());
+            //Se quito mensaje doble de error
+            System.out.println( e.getMessage());
         }
     }
 }

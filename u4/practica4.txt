@@ -1,34 +1,26 @@
-program nombre?;
+program pruebacondicional? ;
 var
-int :  uno&, dos& ;
-real  : tres% ;
-string : cuatro#;
-bool : cinco$  ;
+real :  suma%, promedio% ;
+int :  a_1&, dos& , tres&;
+string : cadena#, texto#;
+bool :  valor$, b$ ;
 begin
-uno& :=  10 + ( 39 * dos& ) ;
-cinco$  := ( uno& <= 10 );
-if ( uno& > 10 ) then
+if (( dos& >= tres& )  && ( b$ == true)) then
 begin
-write (dos&);
+write ( "mayor");
+tres& := dos& ;
 end
 else
 begin
-write ( dos&);
-cinco$ := ( 10  * (89 - 100) )  >= ( dos& ) ;
-end
-dos& := 1;
-while ( dos& >  5 ) do
+if ( a_1& > 100 ) then
 begin
-dos& := dos& + 1;
-write ( dos&) ;
+read (a_1&);
+texto# := "valor" ;
 end
-cinco$ := false;
-repeat
+else
 begin
-dos& := dos& + 2;
-write (dos&);
-read ( tres% );
+write("mayor" );
+valor$ := false;
 end
-until ( cinco$ == true );
-
+end
 end
