@@ -1,0 +1,4 @@
+Error en la linea: 10. En la palabra: “mayor”
+Error en la linea: 18. En la palabra: “valor”
+Error en la linea: 22. En la palabra: “
+Error en la linea: 22. En la palabra: mayor”
