@@ -8,4 +8,4 @@ En cada unidad se encontrarán las prácticas de cada unidad así como las clase
 Aquí se encuentra el proyecto integrador en unidad 4 y 5, sin embargo solo es la programacion realizada por ello, el analisis para llegar a ella fue de manera propia.
 </div>
 
-<h3> Ya esta finalizado el curso, sin embargo es mi lógica personal, implementada la programacion con mis conocimientos..</h3>
+<h3> Ya esta finalizado el curso, sin embargo es mi lógica personal, implementada la programacion con mis conocimientos.</h3>
